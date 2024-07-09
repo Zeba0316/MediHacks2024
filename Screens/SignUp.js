@@ -127,16 +127,15 @@ const SignUp = () => {
                         resizeMode="cover"
                         shouldPlay
                         isLooping
-                        style={{ height: "100%", width: "100%", zIndex: -2, position: "absolute", top: 0, left: 0, opacity: 1 }}
+                        style={{ height: "100%", width: "100%", zIndex: -2, position: "absolute", top: 0, left: 0, opacity: 0.95 }}
                     />
                     <View style={{ height: "100%", width: "100%", position: "absolute", backgroundColor: "rgba(214,154,156, 0.25)", zIndex: -2 }}></View>
                     <View style={{ flex: 1, width: "100%", justifyContent: "center", alignItems: "center", gap: 15, marginTop: hp("4%") }}>
                         {/* Heading */}
-                        <Text style={{ color: "white", fontSize: hp("5%"), fontWeight: '400', textShadowColor: 'rgba(255,255,255,0.65)', textShadowRadius: 10 }}>Sign Up</Text>
+                        <Text style={{ color: "white", fontSize: hp("5%"), fontWeight: '400', textShadowColor: 'rgba(255,255,255,0.8)', textShadowRadius: 10 }}>Sign Up</Text>
                         {/* Info Container */}
 
                         <View style={{ minHeight: hp("33%"), width: "88%", alignItems: "center", backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 15, paddingVertical: "5%", borderWidth: 1.6, borderColor: "rgba(255,255,255,0.37)", gap: 10, position: 'relative', overflow: "hidden" }}>
-                            {/* <View style={{ position: "absolute", height: "120%", width: "100%", backgroundColor: "rgba(0,0,0,0.1)" }}></View> */}
                             <Canvas style={{ position: "absolute", height: "120%", width: "100%",overflow:"hidden" }}>
                                 <BackdropBlur blur={5} clip={{ x: 0, y: 0, width: 656, height: 628 }}>
                                     <Fill color="rgba(0,0,0, 0.1)" />
@@ -189,7 +188,7 @@ const SignUp = () => {
                         </View>
                         {/* Navigation to Login screen */}
                         <TouchableOpacity onPress={() => { navigation.navigate("Login") }}>
-                            <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: hp("2.1%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.5)", textShadowRadius: 10 }}>Already have an account?</Text>
+                            <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: hp("2.1%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.85)", textShadowRadius: 10 }}>Already have an account?</Text>
                         </TouchableOpacity>
                     </View>
                 </KeyboardAvoidingView>

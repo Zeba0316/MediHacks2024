@@ -8,7 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Video } from 'expo-av'
 import axios from 'axios'
-
+import { Blur, BlurMask, Canvas, Fill, Image, useImage } from '@shopify/react-native-skia'
 const SignUp = () => {
     // navigation 
     const navigation = useNavigation();
@@ -136,7 +136,20 @@ const SignUp = () => {
                         {/* Info Container */}
 
                         <View style={{ minHeight: hp("33%"), width: "88%", alignItems: "center", backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 15, paddingVertical: "5%", borderWidth: 1.5, borderColor: "rgba(255,255,255,0.3)", gap: 10, position: 'relative', overflow: "hidden" }}>
-                            <View style={{ position: "absolute", height: "120%", width: "100%", backgroundColor: "rgba(0,0,0,0.1)" }}></View>
+                            {/* <View style={{ position: "absolute", height: "120%", width: "100%", backgroundColor: "rgba(0,0,0,0.1)" }}></View> */}
+                            <Canvas style={{ position: "absolute", height: "120%", width: "100%", }}>
+                                <Image
+                                    x={0}
+                                    y={0}
+                                    width={556}
+                                    height={556}
+                                    opacity={0.1}
+                                    image={useImage(require("../assets/infoConatiner.jpg"))}
+                                    fit="cover"
+                                >
+                                    <Blur blur={30} />
+                                </Image>
+                            </Canvas>
                             {/* start of the components */}
                             {/* Username */}
                             <TouchableOpacity style={{ height: manageField.usernameField ? hp("12.5%") : hp("6%"), width: "88%", justifyContent: "flex-start", backgroundColor: "rgba(255,255,255,0.25)", borderRadius: 10, paddingHorizontal: 10, gap: hp("0.1%"), overflow: 'hidden' }}
@@ -184,7 +197,7 @@ const SignUp = () => {
                         </View>
                         {/* Navigation to Login screen */}
                         <TouchableOpacity onPress={() => { navigation.navigate("Login") }}>
-                            <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: hp("2.1%"), fontWeight: "500",textShadowColor:"rgba(255,255,255,0.5)",textShadowRadius:10 }}>Already have an account?</Text>
+                            <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: hp("2.1%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.5)", textShadowRadius: 10 }}>Already have an account?</Text>
                         </TouchableOpacity>
                     </View>
                 </KeyboardAvoidingView>

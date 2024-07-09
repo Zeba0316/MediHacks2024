@@ -29,3 +29,17 @@ mongoose.connect(`mongodb+srv://raza:${passDb}@cluster0.euagu12.mongodb.net/`, {
     console.log(`Error in connecting to DB : ${err}`);
 });
 
+//Api:
+// endpoint for Sign Up:
+app.post("/register", (req, res) => {
+    const { username, email, pass } = req.body;
+    console.log(username, email, pass);
+    try {
+
+        res.status(200).json({ message: "Sign Up Successful!" });
+    }
+    catch (err) {
+        console.log("Error in Signing Up:", err);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+})

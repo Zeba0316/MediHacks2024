@@ -10,32 +10,34 @@ import { Video } from 'expo-av'
 import axios from 'axios'
 import { BackdropBlur, BackdropFilter, Blur, BlurMask, Canvas, ColorMatrix, Fill, Image, useImage } from '@shopify/react-native-skia'
 const Login = () => {
-    // navigation 
+    // navigation: 
     const navigation = useNavigation();
+    // SERVER URL:
+    const serverUrl=process.env.EXPO_PUBLIC_SERVERURL;
 
     const [manageField, setManageField] = useState({
         usernameField: false,
         passField: false,
     })
-    const [signUpDetails, setSignUpDetails] = useState({
+    const [loginDetails, setloginDetails] = useState({
         username: '',
         pass: '',
     })
     const animatedUser = useRef(new Animated.Value(0)).current;
     const animatedPass = useRef(new Animated.Value(0)).current;
 
-    // signUp button press function:
+    // Login button press function:
     const sendDetails = async () => {
-        const username = signUpDetails.username.trim();
-        const pass = signUpDetails.pass.trim();
+        const username = loginDetails.username.trim();
+        const pass = loginDetails.pass.trim();
 
         if (!username || !pass) {
-            Alert.alert("All fields are required!");
+            Alert.alert("Fill all fiedls", "All fields are required!");
             return;
         }
 
         try {
-            const res = await axios.post("", { username, pass });
+            const res = await axios.post(`${serverUrl}/login`, { username, pass });
             if (res.status === 200) {
                 Alert.alert("Login Successful!");
             } else {
@@ -131,7 +133,9 @@ const Login = () => {
                                     <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Username</Text>
                                 </Animated.View>
                                 {/* input area */}
-                                <TextInput onChangeText={text => setSignUpDetails(prev => ({ ...prev, username: text }))} placeholder='Enter Username ' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, alignSelf: "center" }} />
+                                <TextInput onChangeText={text => setloginDetails(prev => ({ ...prev, username: text }))}
+                                    value={loginDetails.username}
+                                    placeholder='Enter Username ' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, alignSelf: "center" }} />
                             </TouchableOpacity>
                             {/* Password */}
                             <TouchableOpacity style={{ height: manageField.passField ? hp("12.5%") : hp("6%"), width: "88%", justifyContent: "flex-start", backgroundColor: "rgba(255,255,255,0.25)", borderRadius: 10, paddingHorizontal: 10, gap: hp("0.1%"), overflow: 'hidden' }}
@@ -143,7 +147,9 @@ const Login = () => {
                                     <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Password</Text>
                                 </Animated.View>
                                 {/* input area */}
-                                <TextInput secureTextEntry={true} onChangeText={text => setSignUpDetails(prev => ({ ...prev, pass: text }))} placeholder='Enter Password' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, }} />
+                                <TextInput secureTextEntry={true} onChangeText={text => setloginDetails(prev => ({ ...prev, pass: text }))} placeholder='Enter Password'
+                                    value={loginDetails.pass}
+                                    placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, }} />
                             </TouchableOpacity>
                             {/* Button for Register */}
                             <TouchableOpacity

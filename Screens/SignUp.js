@@ -12,6 +12,8 @@ import { BackdropBlur, BackdropFilter, Blur, BlurMask, Canvas, ColorMatrix, Fill
 const SignUp = () => {
     // navigation 
     const navigation = useNavigation();
+    // SERVER URL:
+    const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
 
     const [manageField, setManageField] = useState({
         usernameField: false,
@@ -34,16 +36,18 @@ const SignUp = () => {
         const pass = signUpDetails.pass.trim();
 
         if (!username || !email || !pass) {
-            Alert.alert("All fields are required!");
+            Alert.alert("Fill all fiedls", "All fields are required!");
             return;
         }
 
         try {
-            const res = await axios.post("", { username, email, pass });
+            const res = await axios.post(`${serverUrl}/register`, { username, email, pass });
             if (res.status === 200) {
-                Alert.alert("Sign Up Successful!");
+                setSignUpDetails({ username: '', email: '', pass: '' });
+                Keyboard.dismiss();
+                Alert.alert("Success", res.data.message);
             } else {
-                Alert.alert("Error in Signing up, Please Try Again Later");
+                Alert.alert("Error In Sign Up", res.data.message);
             }
         } catch (error) {
             Alert.alert("Error in Signing up, Please Try Again Later");
@@ -136,7 +140,7 @@ const SignUp = () => {
                         {/* Info Container */}
 
                         <View style={{ minHeight: hp("33%"), width: "88%", alignItems: "center", backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 15, paddingVertical: "5%", borderWidth: 1.6, borderColor: "rgba(255,255,255,0.37)", gap: 10, position: 'relative', overflow: "hidden" }}>
-                            <Canvas style={{ position: "absolute", height: "120%", width: "100%",overflow:"hidden" }}>
+                            <Canvas style={{ position: "absolute", height: "120%", width: "100%", overflow: "hidden" }}>
                                 <BackdropBlur blur={5} clip={{ x: 0, y: 0, width: 656, height: 628 }}>
                                     <Fill color="rgba(0,0,0, 0.1)" />
                                 </BackdropBlur>
@@ -152,7 +156,9 @@ const SignUp = () => {
                                     <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Username</Text>
                                 </Animated.View>
                                 {/* input area */}
-                                <TextInput onChangeText={text => setSignUpDetails(prev => ({ ...prev, username: text }))} placeholder='Enter Username' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, alignSelf: "center" }} />
+                                <TextInput onChangeText={text => setSignUpDetails(prev => ({ ...prev, username: text }))}
+                                    value={signUpDetails.username}
+                                    placeholder='Enter Username' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, alignSelf: "center" }} />
                             </TouchableOpacity>
                             {/* Email */}
                             <TouchableOpacity style={{ height: manageField.emailField ? hp("12.5%") : hp("6%"), width: "88%", justifyContent: "flex-start", backgroundColor: "rgba(255,255,255,0.25)", borderRadius: 10, paddingHorizontal: 10, gap: hp("0.1%"), overflow: 'hidden' }}
@@ -164,7 +170,9 @@ const SignUp = () => {
                                     <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Email</Text>
                                 </Animated.View>
                                 {/* input area */}
-                                <TextInput onChangeText={text => setSignUpDetails(prev => ({ ...prev, email: text }))} placeholder='Enter Email Id' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, }} />
+                                <TextInput onChangeText={text => setSignUpDetails(prev => ({ ...prev, email: text }))}
+                                    value={signUpDetails.email}
+                                    placeholder='Enter Email Id' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, }} />
                             </TouchableOpacity>
                             {/* Password */}
                             <TouchableOpacity style={{ height: manageField.passField ? hp("12.5%") : hp("6%"), width: "88%", justifyContent: "flex-start", backgroundColor: "rgba(255,255,255,0.25)", borderRadius: 10, paddingHorizontal: 10, gap: hp("0.1%"), overflow: 'hidden' }}
@@ -176,7 +184,9 @@ const SignUp = () => {
                                     <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Password</Text>
                                 </Animated.View>
                                 {/* input area */}
-                                <TextInput secureTextEntry={true} onChangeText={text => setSignUpDetails(prev => ({ ...prev, pass: text }))} placeholder='Enter Password' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, }} />
+                                <TextInput secureTextEntry={true} onChangeText={text => setSignUpDetails(prev => ({ ...prev, pass: text }))}
+                                    value={signUpDetails.pass}
+                                    placeholder='Enter Password' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, }} />
                             </TouchableOpacity>
                             {/* Button for Register */}
                             <TouchableOpacity

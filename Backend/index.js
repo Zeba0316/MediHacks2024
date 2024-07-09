@@ -29,6 +29,9 @@ mongoose.connect(`mongodb+srv://raza:${passDb}@cluster0.euagu12.mongodb.net/`, {
     console.log(`Error in connecting to DB : ${err}`);
 });
 
+// Importing Models:
+const User = require("./Models/user");
+
 //Api:
 // endpoint for Sign Up:
 app.post("/register", (req, res) => {

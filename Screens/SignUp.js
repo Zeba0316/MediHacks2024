@@ -135,7 +135,7 @@ const SignUp = () => {
                         <Text style={{ color: "white", fontSize: hp("5%"), fontWeight: '400', textShadowColor: 'rgba(255,255,255,0.65)', textShadowRadius: 10 }}>Sign Up</Text>
                         {/* Info Container */}
 
-                        <View style={{ minHeight: hp("33%"), width: "88%", alignItems: "center", backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 15, paddingVertical: "5%", borderWidth: 1.5, borderColor: "rgba(255,255,255,0.3)", gap: 10, position: 'relative', overflow: "hidden" }}>
+                        <View style={{ minHeight: hp("33%"), width: "88%", alignItems: "center", backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 15, paddingVertical: "5%", borderWidth: 1.6, borderColor: "rgba(255,255,255,0.37)", gap: 10, position: 'relative', overflow: "hidden" }}>
                             {/* <View style={{ position: "absolute", height: "120%", width: "100%", backgroundColor: "rgba(0,0,0,0.1)" }}></View> */}
                             <Canvas style={{ position: "absolute", height: "120%", width: "100%",overflow:"hidden" }}>
                                 <BackdropBlur blur={5} clip={{ x: 0, y: 0, width: 656, height: 628 }}>

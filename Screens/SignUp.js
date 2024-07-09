@@ -132,11 +132,11 @@ const SignUp = () => {
                     <View style={{ height: "100%", width: "100%", position: "absolute", backgroundColor: "rgba(214,154,156, 0.25)", zIndex: -2 }}></View>
                     <View style={{ flex: 1, width: "100%", justifyContent: "center", alignItems: "center", gap: 15, marginTop: hp("4%") }}>
                         {/* Heading */}
-                        <Text style={{ color: "white", fontSize: hp("5%"), fontWeight: '400', textShadowColor: 'rgba(0,0,0,0.3)', textShadowRadius: 10 }}>Sign Up</Text>
+                        <Text style={{ color: "white", fontSize: hp("5%"), fontWeight: '400', textShadowColor: 'rgba(255,255,255,0.65)', textShadowRadius: 10 }}>Sign Up</Text>
                         {/* Info Container */}
 
                         <View style={{ minHeight: hp("33%"), width: "88%", alignItems: "center", backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 15, paddingVertical: "5%", borderWidth: 1.5, borderColor: "rgba(255,255,255,0.3)", gap: 10, position: 'relative', overflow: "hidden" }}>
-                            <View style={{ position: "absolute", height: "120%", width: "100%", backgroundColor: "rgba(0,0,0,0.12)" }}></View>
+                            <View style={{ position: "absolute", height: "120%", width: "100%", backgroundColor: "rgba(0,0,0,0.1)" }}></View>
                             {/* start of the components */}
                             {/* Username */}
                             <TouchableOpacity style={{ height: manageField.usernameField ? hp("12.5%") : hp("6%"), width: "88%", justifyContent: "flex-start", backgroundColor: "rgba(255,255,255,0.25)", borderRadius: 10, paddingHorizontal: 10, gap: hp("0.1%"), overflow: 'hidden' }}
@@ -145,7 +145,7 @@ const SignUp = () => {
                                 {/* icon and heading */}
                                 <Animated.View style={{ height: hp("6%"), flexDirection: 'row', alignItems: "center", gap: 10, transform: [{ translateX: animatedUser }] }}>
                                     <FontAwesome name="user" size={hp("3%")} color="rgba(255,255,255,1)" />
-                                    <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500" }}>Username</Text>
+                                    <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Username</Text>
                                 </Animated.View>
                                 {/* input area */}
                                 <TextInput onChangeText={text => setSignUpDetails(prev => ({ ...prev, username: text }))} placeholder='Enter Username' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', borderBottomWidth: 1, borderColor: "grey", paddingHorizontal: 10, alignSelf: "center" }} />
@@ -157,7 +157,7 @@ const SignUp = () => {
                                 {/* icon and heading */}
                                 <Animated.View style={{ height: hp("6%"), flexDirection: 'row', alignItems: "center", gap: 10, transform: [{ translateX: animatedEmail }] }}>
                                     <MaterialCommunityIcons name="email" size={hp("3%")} color="rgba(255,255,255,1)" />
-                                    <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500" }}>Email</Text>
+                                    <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Email</Text>
                                 </Animated.View>
                                 {/* input area */}
                                 <TextInput onChangeText={text => setSignUpDetails(prev => ({ ...prev, email: text }))} placeholder='Enter Email Id' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "grey", paddingHorizontal: 10, }} />
@@ -169,7 +169,7 @@ const SignUp = () => {
                                 {/* icon and heading */}
                                 <Animated.View style={{ height: hp("6%"), flexDirection: 'row', alignItems: "center", gap: 10, transform: [{ translateX: animatedPass }] }}>
                                     <MaterialCommunityIcons name="key" size={hp("3%")} color="rgba(255,255,255,1)" />
-                                    <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500" }}>Password</Text>
+                                    <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Password</Text>
                                 </Animated.View>
                                 {/* input area */}
                                 <TextInput secureTextEntry={true} onChangeText={text => setSignUpDetails(prev => ({ ...prev, pass: text }))} placeholder='Enter Password' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "grey", paddingHorizontal: 10, }} />
@@ -184,7 +184,7 @@ const SignUp = () => {
                         </View>
                         {/* Navigation to Login screen */}
                         <TouchableOpacity onPress={() => { navigation.navigate("Login") }}>
-                            <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: hp("2.1%"), fontWeight: "500" }}>Already have an account?</Text>
+                            <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: hp("2.1%"), fontWeight: "500",textShadowColor:"rgba(255,255,255,0.5)",textShadowRadius:10 }}>Already have an account?</Text>
                         </TouchableOpacity>
                     </View>
                 </KeyboardAvoidingView>

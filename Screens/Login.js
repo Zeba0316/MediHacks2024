@@ -13,7 +13,7 @@ const Login = () => {
     // navigation: 
     const navigation = useNavigation();
     // SERVER URL:
-    const serverUrl=process.env.EXPO_PUBLIC_SERVERURL;
+    const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
 
     const [manageField, setManageField] = useState({
         usernameField: false,
@@ -39,12 +39,12 @@ const Login = () => {
         try {
             const res = await axios.post(`${serverUrl}/login`, { username, pass });
             if (res.status === 200) {
-                Alert.alert("Login Successful!");
+                navigation.navigate("Home");
             } else {
-                Alert.alert("Error in Signing in, Please Try Again Later");
+                Alert.alert("Error in Signing In", res.data.message);
             }
         } catch (error) {
-            Alert.alert("Error in Signing in, Please Try Again Later");
+            Alert.alert("Error in Signing In, Please Try Again Later");
             console.log("error: ", error);
         }
     }

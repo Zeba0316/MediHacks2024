@@ -8,7 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Video } from 'expo-av'
 import axios from 'axios'
-import { Blur, BlurMask, Canvas, Fill, Image, useImage } from '@shopify/react-native-skia'
+import { BackdropBlur, BackdropFilter, Blur, BlurMask, Canvas, ColorMatrix, Fill, Image, useImage } from '@shopify/react-native-skia'
 const SignUp = () => {
     // navigation 
     const navigation = useNavigation();
@@ -137,18 +137,10 @@ const SignUp = () => {
 
                         <View style={{ minHeight: hp("33%"), width: "88%", alignItems: "center", backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 15, paddingVertical: "5%", borderWidth: 1.5, borderColor: "rgba(255,255,255,0.3)", gap: 10, position: 'relative', overflow: "hidden" }}>
                             {/* <View style={{ position: "absolute", height: "120%", width: "100%", backgroundColor: "rgba(0,0,0,0.1)" }}></View> */}
-                            <Canvas style={{ position: "absolute", height: "120%", width: "100%", }}>
-                                <Image
-                                    x={0}
-                                    y={0}
-                                    width={556}
-                                    height={556}
-                                    opacity={0.1}
-                                    image={useImage(require("../assets/infoConatiner.jpg"))}
-                                    fit="cover"
-                                >
-                                    <Blur blur={30} />
-                                </Image>
+                            <Canvas style={{ position: "absolute", height: "120%", width: "100%",overflow:"hidden" }}>
+                                <BackdropBlur blur={5} clip={{ x: 0, y: 0, width: 656, height: 628 }}>
+                                    <Fill color="rgba(0,0,0, 0.1)" />
+                                </BackdropBlur>
                             </Canvas>
                             {/* start of the components */}
                             {/* Username */}
@@ -161,7 +153,7 @@ const SignUp = () => {
                                     <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Username</Text>
                                 </Animated.View>
                                 {/* input area */}
-                                <TextInput onChangeText={text => setSignUpDetails(prev => ({ ...prev, username: text }))} placeholder='Enter Username' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', borderBottomWidth: 1, borderColor: "grey", paddingHorizontal: 10, alignSelf: "center" }} />
+                                <TextInput onChangeText={text => setSignUpDetails(prev => ({ ...prev, username: text }))} placeholder='Enter Username' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, alignSelf: "center" }} />
                             </TouchableOpacity>
                             {/* Email */}
                             <TouchableOpacity style={{ height: manageField.emailField ? hp("12.5%") : hp("6%"), width: "88%", justifyContent: "flex-start", backgroundColor: "rgba(255,255,255,0.25)", borderRadius: 10, paddingHorizontal: 10, gap: hp("0.1%"), overflow: 'hidden' }}
@@ -173,7 +165,7 @@ const SignUp = () => {
                                     <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Email</Text>
                                 </Animated.View>
                                 {/* input area */}
-                                <TextInput onChangeText={text => setSignUpDetails(prev => ({ ...prev, email: text }))} placeholder='Enter Email Id' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "grey", paddingHorizontal: 10, }} />
+                                <TextInput onChangeText={text => setSignUpDetails(prev => ({ ...prev, email: text }))} placeholder='Enter Email Id' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, }} />
                             </TouchableOpacity>
                             {/* Password */}
                             <TouchableOpacity style={{ height: manageField.passField ? hp("12.5%") : hp("6%"), width: "88%", justifyContent: "flex-start", backgroundColor: "rgba(255,255,255,0.25)", borderRadius: 10, paddingHorizontal: 10, gap: hp("0.1%"), overflow: 'hidden' }}
@@ -185,7 +177,7 @@ const SignUp = () => {
                                     <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Password</Text>
                                 </Animated.View>
                                 {/* input area */}
-                                <TextInput secureTextEntry={true} onChangeText={text => setSignUpDetails(prev => ({ ...prev, pass: text }))} placeholder='Enter Password' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "grey", paddingHorizontal: 10, }} />
+                                <TextInput secureTextEntry={true} onChangeText={text => setSignUpDetails(prev => ({ ...prev, pass: text }))} placeholder='Enter Password' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, }} />
                             </TouchableOpacity>
                             {/* Button for Register */}
                             <TouchableOpacity

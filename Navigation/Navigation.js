@@ -14,7 +14,7 @@ const Navigation = () => {
   return (
     <View style={{ flex: 1 }}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Welcome">
+        <Stack.Navigator initialRouteName="Verification">
           <Stack.Screen
             name="Welcome"
             component={WelcomeScreen}
@@ -41,9 +41,9 @@ const Navigation = () => {
             component={Verification}
             options={{ headerShown: false }}
           />
-            <Stack.Screen name="Home" component={Home} options={{
-                        headerShown: false
-                    }} />
+          <Stack.Screen name="Home" component={Home} options={{
+            headerShown: false
+          }} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

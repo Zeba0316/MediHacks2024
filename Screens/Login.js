@@ -111,7 +111,7 @@ const Login = () => {
                         isLooping
                         style={{ height: "100%", width: "100%", zIndex: -2, position: "absolute", top: 0, left: 0, opacity: 0.95 }}
                     />
-                    <View style={{ height: "100%", width: "100%", position: "absolute", backgroundColor: "rgba(214,154,156, 0.25)", zIndex: -2 }}></View>
+                    <View style={{ height: "100%", width: "100%", position: "absolute", backgroundColor: "rgba(29,20,21,0.2)", zIndex: -2 }}></View>
                     <View style={{ flex: 1, width: "100%", justifyContent: "center", alignItems: "center", gap: 15, marginTop: hp("7%") }}>
                         {/* Heading */}
                         <Text style={{ color: "white", fontSize: hp("5%"), fontWeight: '400', textShadowColor: 'rgba(255,255,255,0.8)', textShadowRadius: 10 }}>Login</Text>
@@ -156,7 +156,7 @@ const Login = () => {
                             <TouchableOpacity
                                 onPress={() => { sendDetails(); }}
                                 style={{ height: hp("5%"), width: 100, backgroundColor: "rgba(255,255,255,0.9)", justifyContent: "center", alignItems: "center", borderRadius: 7 }}>
-                                <Text style={{ color: "rgba(0,0,0,0.4)", fontSize: hp("2%"), fontWeight: '500' }}>Login</Text>
+                                <Text style={{ color: "rgba(0,0,0,0.4)", fontSize: hp("2%"), fontWeight: '500' ,}}>Login</Text>
                             </TouchableOpacity>
                             {/* end of the components */}
                         </View>

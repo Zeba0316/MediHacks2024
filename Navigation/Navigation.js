@@ -47,32 +47,13 @@ const Navigation = () => {
             component={Verification}
             options={{ headerShown: false }}
           />
+            <Stack.Screen name="Home" component={Home} options={{
+                        headerShown: false
+                    }} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>
   );
 };
-    const Stack = createNativeStackNavigator();
-    return (
-        <View style={{ flex: 1 }}>
-            <NavigationContainer>
-                <Stack.Navigator initialRouteName='Welcome'>
-                    <Stack.Screen name="Welcome" component={WelcomeScreen} options={{
-                        headerShown: false
-                    }} />
-                    <Stack.Screen name="Login" component={Login} options={{
-                        headerShown: false
-                    }} />
-                    <Stack.Screen name="Sign-Up" component={SignUp} options={{
-                        headerShown: false
-                    }} />
-                    <Stack.Screen name="Home" component={Home} options={{
-                        headerShown: false
-                    }} />
-                </Stack.Navigator>
-            </NavigationContainer>
-        </View>
-    )
-}
 
 export default Navigation;

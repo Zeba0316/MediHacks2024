@@ -1,19 +1,13 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SignUp from "../Screens/SignUp";
-import Login from "../Screens/Login";
-import WelcomeScreen from "../Screens/Welcome";
-import Verification from "../Screens/Verification";
-import { View, Text } from 'react-native'
+
 import React from 'react'
+import { View, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import WelcomeScreen from '../Screens/Welcome'
 import Login from '../Screens/Login'
 import SignUp from '../Screens/SignUp'
 import Home from '../Screens/Home'
+import Verification from "../Screens/Verification";
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();

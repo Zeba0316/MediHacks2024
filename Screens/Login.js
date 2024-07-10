@@ -2,16 +2,18 @@ import { View, Text, TouchableOpacity, TextInput, LayoutAnimation, Animated, Key
 import React, { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 // icons import
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Video } from 'expo-av'
 import axios from 'axios'
 import { BackdropBlur, BackdropFilter, Blur, BlurMask, Canvas, ColorMatrix, Fill, Image, useImage } from '@shopify/react-native-skia'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 const Login = () => {
-    // navigation: 
+    // navigation Hook and Focus: 
     const navigation = useNavigation();
+    const focus = useIsFocused();
     // SERVER URL:
     const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
 
@@ -25,6 +27,25 @@ const Login = () => {
     })
     const animatedUser = useRef(new Animated.Value(0)).current;
     const animatedPass = useRef(new Animated.Value(0)).current;
+
+    //Navigate Home If Already Logged In: 
+    useEffect(() => {
+        const alreadyLogIn = async () => {
+            try {
+                const token = await AsyncStorage.getItem("authToken");
+                if (token) {
+                    navigation.navigate("Home");
+                }
+            }
+            catch (err) {
+                console.log("Error : ", err);
+            }
+
+        }
+        if (focus) {
+            alreadyLogIn();
+        }
+    }, [focus])
 
     // Login button press function:
     const sendDetails = async () => {
@@ -40,15 +61,18 @@ const Login = () => {
             const res = await axios.post(`${serverUrl}/login`, { username, pass });
             if (res.status === 200) {
                 setloginDetails({ username: '', pass: '' });
+                const token = res.data.token;
+                AsyncStorage.setItem("authToken", token);
                 navigation.navigate("Home");
             } else {
                 Alert.alert("Error in Signing In", res.data.message);
             }
         } catch (error) {
-            Alert.alert("Error in Signing In, Please Try Again Later");
-            console.log("error: ", error);
+            Alert.alert("Login Failed", "Please Enter Correct Password or Email");
+            console.log("Login Error : ", error);
         }
     }
+
     // toggle field select function:
     const toggleField = (fieldname) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -156,7 +180,7 @@ const Login = () => {
                             <TouchableOpacity
                                 onPress={() => { sendDetails(); }}
                                 style={{ height: hp("5%"), width: 100, backgroundColor: "rgba(255,255,255,0.9)", justifyContent: "center", alignItems: "center", borderRadius: 7 }}>
-                                <Text style={{ color: "rgba(0,0,0,0.4)", fontSize: hp("2%"), fontWeight: '500' ,}}>Login</Text>
+                                <Text style={{ color: "rgba(0,0,0,0.4)", fontSize: hp("2%"), fontWeight: '500', }}>Login</Text>
                             </TouchableOpacity>
                             {/* end of the components */}
                         </View>

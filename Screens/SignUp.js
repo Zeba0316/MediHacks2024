@@ -3,12 +3,15 @@ import React, { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
+import { Video } from 'expo-av'
+import * as ImagePicker from 'expo-image-picker';
+import { BackdropBlur, BackdropFilter, Blur, BlurMask, Canvas, ColorMatrix, Fill, Image, useImage } from '@shopify/react-native-skia'
 // icons import
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Video } from 'expo-av'
-import axios from 'axios'
-import { BackdropBlur, BackdropFilter, Blur, BlurMask, Canvas, ColorMatrix, Fill, Image, useImage } from '@shopify/react-native-skia'
+import { MaterialIcons } from '@expo/vector-icons';
+
 const SignUp = () => {
     // navigation 
     const navigation = useNavigation();
@@ -24,6 +27,7 @@ const SignUp = () => {
         username: '',
         email: '',
         pass: '',
+        img: ''
     })
     const animatedUser = useRef(new Animated.Value(0)).current;
     const animatedEmail = useRef(new Animated.Value(0)).current;
@@ -34,16 +38,30 @@ const SignUp = () => {
         const username = signUpDetails.username.trim();
         const email = signUpDetails.email.trim();
         const pass = signUpDetails.pass.trim();
+        const img = signUpDetails.img;
 
-        if (!username || !email || !pass) {
+        if (!username || !email || !pass || !img) {
             Alert.alert("Fill all fiedls", "All fields are required!");
             return;
         }
+        const formData = new FormData();
+        formData.append('image', {
+            uri: img,
+            name: 'photo.jpg',
+            type: 'image/jpeg',
+        });
+        formData.append('username', username);
+        formData.append('email', email);
+        formData.append('password', pass);
 
         try {
-            const res = await axios.post(`${serverUrl}/register`, { username, email, pass });
+            const res = await axios.post(`${serverUrl}/register`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             if (res.status === 200) {
-                setSignUpDetails({ username: '', email: '', pass: '' });
+                setSignUpDetails({ username: '', email: '', pass: '', img: '' });
                 Keyboard.dismiss();
                 Alert.alert("Success", res.data.message);
             } else {
@@ -54,6 +72,25 @@ const SignUp = () => {
             console.log("error: ", error);
         }
     }
+
+    //Image Pick Function:
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            quality: 1,
+        });
+
+        if (!result.cancelled) {
+            if (result.assets && result.assets.length > 0) {
+                setSignUpDetails(prev => ({ ...prev, img: result.assets[0].uri }));
+            } else {
+                console.log("No assets found in the result");
+                Alert.alert("Error", "No image selected. Please try again.");
+            }
+        }
+    }
+
     // toggle field select function:
     const toggleField = (fieldname) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -188,6 +225,14 @@ const SignUp = () => {
                                     value={signUpDetails.pass}
                                     placeholder='Enter Password' placeholderTextColor="rgba(255,255,255,0.9)" style={{ height: hp("5%"), width: "85%", color: 'white', alignSelf: "center", borderBottomWidth: 1, borderColor: "white", paddingHorizontal: 10, }} />
                             </TouchableOpacity>
+                            {/* Image selection */}
+                            <View style={{ height: hp("6%"), width: "85%", flexDirection: "row", alignItems: "center", justifyContent: "flex-start", overflow: 'hidden', gap: 10 }}>
+                                <TouchableOpacity onPress={() => { pickImage(); }}>
+                                    <MaterialIcons name="insert-photo" size={hp("5%")} color="rgba(255,255,255,0.9)" />
+                                </TouchableOpacity>
+                                <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Choose Your Image</Text>
+                                {signUpDetails.img && <FontAwesome name="check" size={hp("3%")} color="rgba(0,215,0,0.85)" style={{marginLeft:"auto"}} />}
+                            </View>
                             {/* Button for Register */}
                             <TouchableOpacity
                                 onPress={() => { sendDetails(); }}

@@ -16,19 +16,19 @@ const Verification = () => {
             mirrorImage: true,
         });
 
-        if (!result.cancelled) {
-            if (result.assets && result.assets.length > 0) {
-                setImageUri(result.assets[0].uri);
-            } else {
-                console.log("No assets found in the result");
-                Alert.alert("Take A selfie", "Take a selfie for verification");
-            }
+        if (!result.canceled) {
+            setImageUri(result.assets[0].uri);
         }
+        return;
     };
 
     const handleRetake = () => {
         setImageUri(null);
     };
+
+    const postImage = async () => {
+        return;
+    }
 
     const handleSubmit = () => {
         if (imageUri) {

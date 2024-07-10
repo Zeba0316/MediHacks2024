@@ -81,13 +81,12 @@ const SignUp = () => {
             quality: 1,
         });
 
-        if (!result.cancelled) {
-            if (result.assets && result.assets.length > 0) {
-                setSignUpDetails(prev => ({ ...prev, img: result.assets[0].uri }));
-            } else {
-                console.log("No assets found in the result");
-                Alert.alert("Error", "No image selected. Please try again.");
-            }
+        if (!result.canceled) {
+            setSignUpDetails(prev => ({ ...prev, img: result.assets[0].uri }));
+        }
+        else {
+            console.log("No assets found in the result");
+            Alert.alert("Choose An Image", "No image selected. Please try again.");
         }
     }
 
@@ -231,7 +230,7 @@ const SignUp = () => {
                                     <MaterialIcons name="insert-photo" size={hp("5%")} color="rgba(255,255,255,0.9)" />
                                 </TouchableOpacity>
                                 <Text style={{ color: "rgba(255,255,255,1)", fontSize: hp("2%"), fontWeight: "500", textShadowColor: "rgba(255,255,255,0.8)", textShadowRadius: 10 }}>Choose Your Image</Text>
-                                {signUpDetails.img && <FontAwesome name="check" size={hp("3%")} color="rgba(0,215,0,0.85)" style={{marginLeft:"auto"}} />}
+                                {signUpDetails.img && <FontAwesome name="check" size={hp("3%")} color="rgba(0,215,0,0.85)" style={{ marginLeft: "auto" }} />}
                             </View>
                             {/* Button for Register */}
                             <TouchableOpacity

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text, Animated } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WelcomeScreen = () => {
     // navigation hook:
     const navigation = useNavigation();
+
     // for focus:
     const focus = useIsFocused();
 
@@ -23,8 +25,15 @@ const WelcomeScreen = () => {
                 useNativeDriver: false,
             }).start(() => {
                 // Navigate to Login screen after the animation ends
-                setTimeout(() => {
-                    navigation.navigate("Login");
+                setTimeout(async () => {
+                    // AsyncStorage.clear();
+                    const token = await AsyncStorage.getItem("authToken");
+                    if (token) {
+                        navigation.navigate("Home");
+                    }
+                    else {
+                        navigation.navigate("Login");
+                    }
                 }, 100);
             });
         }
@@ -62,7 +71,7 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(241,194,224,0.75)",
         marginTop: 15,
         marginLeft: 1,
-        borderRadius:100
+        borderRadius: 100
     }
 });
 

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, FlatList, Platform, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, TextInput, Platform, Alert, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -50,7 +50,7 @@ const ProfileBuild = () => {
     if (!pregnancyStatus) {
       return false; // Ensure pregnancy status is selected
     }
-    if (pregnancyStatus === 'Pregnant') {
+    if (pregnancyStatus === 'Pregnancy') {
       return dueDate && (selectedNumBabiesOption || numBabies) && birthPlan && emergencyPhone1 && emergencyPhone2;
     } else {
       return emergencyPhone1 && emergencyPhone2;
@@ -103,115 +103,120 @@ const ProfileBuild = () => {
     resetForm();
   };
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", () => {
+      setShowBirthPlanOptions(false);
+      setShowNumBabiesOptions(false);
+    });
+    return () => {
+      keyboardDidShowListener.remove();
+    }
+  }, [])
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'rgba(29,20,21,1)' }}>
-      <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 20 }}>
-        <View style={{ marginBottom: 20 }}>
-          <Text style={{ color: 'white', marginBottom: 10 }}>Are you pregnant?</Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity onPress={() => {
-              handlePregnancyStatusChange('Pregnant');
-              setShowNumBabiesOptions(true); // Show number of babies options when selecting Pregnant
-            }} style={styles.radioButton}>
-              {pregnancyStatus === 'Pregnant' && <View style={styles.radioInnerCircle} />}
-            </TouchableOpacity>
-            <Text style={{ color: 'white', marginLeft: 10 }}>Pregnant</Text>
-          </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-            <TouchableOpacity onPress={() => {
-              handlePregnancyStatusChange('Not Pregnant');
-              setShowNumBabiesOptions(false); // Hide number of babies options when selecting Not Pregnant
-            }} style={styles.radioButton}>
-              {pregnancyStatus === 'Not Pregnant' && <View style={styles.radioInnerCircle} />}
-            </TouchableOpacity>
-            <Text style={{ color: 'white', marginLeft: 10 }}>Not Pregnant</Text>
-          </View>
-        </View>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20, paddingTop: 20 }}>
+            <View style={{ marginBottom: 20 }}>
+              <Text style={{ color: 'white', marginBottom: 10 }}>Are you pregnant?</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => {
+                  handlePregnancyStatusChange('Pregnancy');
+                  setShowNumBabiesOptions(false);
+                }} style={styles.radioButton}>
+                  {pregnancyStatus === 'Pregnancy' && <View style={styles.radioInnerCircle} />}
+                </TouchableOpacity>
+                <Text style={{ color: 'white', marginLeft: 10 }}>Pregnancy</Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+                <TouchableOpacity onPress={() => {
+                  handlePregnancyStatusChange('MotherHood');
+                  setShowNumBabiesOptions(false);
+                }} style={styles.radioButton}>
+                  {pregnancyStatus === 'MotherHood' && <View style={styles.radioInnerCircle} />}
+                </TouchableOpacity>
+                <Text style={{ color: 'white', marginLeft: 10 }}>MotherHood</Text>
+              </View>
+            </View>
 
-        {pregnancyStatus === 'Pregnant' && (
-          <View>
-            <TouchableOpacity onPress={showDatepicker} style={styles.datePickerButton}>
-              <Text style={{ color: 'white' }}>Select Expected Due Date</Text>
-            </TouchableOpacity>
-            {showDatePicker && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={dueDate || new Date()}
-                mode="date"
-                is24Hour={true}
-                display="default"
-                onChange={onChangeDate}
-              />
-            )}
-            {dueDate && (
-              <Text style={{ color: 'white', marginTop: 10 }}>
-                Selected Due Date: {dueDate.toLocaleDateString()}
-              </Text>
-            )}
-            <TouchableOpacity onPress={toggleBirthPlanOptions} style={styles.dropdownButton}>
-              <Text style={{ color: 'white' }}>
-                {selectedBirthPlanOption ? selectedBirthPlanOption : 'Select Birth Plan'}
-              </Text>
-            </TouchableOpacity>
-            {showBirthPlanOptions && (
-              <FlatList
-                data={birthPlanOptions}
-                renderItem={({ item }) => (
+            {pregnancyStatus === 'Pregnancy' && (
+              <View>
+                <TouchableOpacity onPress={showDatepicker} style={styles.datePickerButton}>
+                  <Text style={{ color: 'white' }}>Select Expected Due Date 📅</Text>
+                </TouchableOpacity>
+                {showDatePicker && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={dueDate || new Date()}
+                    mode="date"
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChangeDate}
+                  />
+                )}
+                {dueDate && (
+                  <Text style={{ color: 'rgba(241,194,224,0.90)', marginBottom: 10, textAlign: "center" }}>
+                    Selected Due Date: {dueDate.toLocaleDateString()}
+                  </Text>
+                )}
+                <TouchableOpacity onPress={toggleBirthPlanOptions} style={styles.dropdownButton}>
+                  <Text style={{ color: 'white' }}>
+                    {selectedBirthPlanOption ? selectedBirthPlanOption : 'Select Birth Plan'}
+                  </Text>
+                </TouchableOpacity>
+                {showBirthPlanOptions && birthPlanOptions.map((item) => (
                   <TouchableOpacity
+                    key={item.id}
                     style={styles.dropdownItem}
                     onPress={() => selectBirthPlanOption(item)}
                   >
                     <Text style={{ color: 'white' }}>{item.label}</Text>
                   </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.id}
-                style={{ marginTop: 10 }}
-              />
-            )}
-            <TouchableOpacity onPress={toggleNumBabiesOptions} style={styles.dropdownButton}>
-              <Text style={{ color: 'white' }}>
-                {selectedNumBabiesOption ? selectedNumBabiesOption.label : 'Number of Babies'}
-              </Text>
-            </TouchableOpacity>
-            {showNumBabiesOptions && (
-              <FlatList
-                data={numBabiesOptions}
-                renderItem={({ item }) => (
+                ))}
+                <TouchableOpacity onPress={toggleNumBabiesOptions} style={styles.dropdownButton}>
+                  <Text style={{ color: 'white' }}>
+                    {selectedNumBabiesOption ? selectedNumBabiesOption.label : 'Number of Babies'}
+                  </Text>
+                </TouchableOpacity>
+                {showNumBabiesOptions && numBabiesOptions.map((item) => (
                   <TouchableOpacity
+                    key={item.id}
                     style={styles.dropdownItem}
                     onPress={() => selectNumBabiesOption(item)}
                   >
                     <Text style={{ color: 'white' }}>{item.label}</Text>
                   </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.id}
-                style={{ marginTop: 10 }}
-              />
+                ))}
+              </View>
             )}
-          </View>
-        )}
+            <Text style={{ color: "rgba(241,194,224,0.90)", fontSize: 20, textAlign: "center", marginTop: 10, textShadowColor: "white", textShadowRadius: 8 }}>Emergency Phone Numbers</Text>
+            <TextInput
+              style={{ ...styles.input, marginBottom: 10 }}
+              placeholder="Emergency Phone Number 1"
+              placeholderTextColor="rgba(255,255,255,0.5)"
+              value={emergencyPhone1}
+              onChangeText={(text) => setEmergencyPhone1(text.replace(/[^0-9]/g, ''))}
+              keyboardType="numeric"
+            />
+            <TextInput
+              style={{ ...styles.input, marginBottom: 10 }}
+              placeholder="Emergency Phone Number 2"
+              placeholderTextColor="rgba(255,255,255,0.5)"
+              value={emergencyPhone2}
+              onChangeText={(text) => setEmergencyPhone2(text.replace(/[^0-9]/g, ''))}
+              keyboardType="numeric"
+            />
 
-        <TextInput
-          style={{ ...styles.input, marginBottom: 10 }}
-          placeholder="Emergency Phone Number 1"
-          placeholderTextColor="rgba(255,255,255,0.5)"
-          value={emergencyPhone1}
-          onChangeText={(text) => setEmergencyPhone1(text.replace(/[^0-9]/g, ''))}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={{ ...styles.input, marginBottom: 10 }}
-          placeholder="Emergency Phone Number 2"
-          placeholderTextColor="rgba(255,255,255,0.5)"
-          value={emergencyPhone2}
-          onChangeText={(text) => setEmergencyPhone2(text.replace(/[^0-9]/g, ''))}
-          keyboardType="numeric"
-        />
-
-        <TouchableOpacity onPress={handleSaveProfile} style={styles.saveButton}>
-          <Text style={{ color: 'rgba(0,0,0,0.4)', fontSize: 18, fontWeight: '500' }}>Save Profile</Text>
-        </TouchableOpacity>
-      </View>
+            <TouchableOpacity onPress={handleSaveProfile} style={styles.saveButton}>
+              <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 18, fontWeight: '500', textShadowRadius: 8, textShadowColor: "rgba(255,255,255,0.6)" }}>Save Profile</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -239,6 +244,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
+    borderRadius: 10
   },
   dropdownButton: {
     height: 40,
@@ -246,7 +252,8 @@ const styles = {
     borderColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
+    marginVertical: 6,
+    borderRadius: 10
   },
   dropdownItem: {
     paddingVertical: 10,
@@ -254,6 +261,7 @@ const styles = {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 5,
     marginBottom: 5,
+    borderRadius: 10
   },
   input: {
     height: 40,
@@ -262,7 +270,7 @@ const styles = {
     color: 'white',
   },
   saveButton: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(241,194,224,0.85)',
     justifyContent: 'center',
     alignItems: 'center',
     height: 50,

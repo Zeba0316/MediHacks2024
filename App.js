@@ -4,6 +4,7 @@ import React from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 // Navigation component import 
 import Navigation from './Navigation/Navigation'
+import {UserContext} from './UserContext';
 
 //enabling for smooth layout animation
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -14,7 +15,9 @@ const App = () => {
     <SafeAreaProvider >
       <StatusBar translucent={true} barStyle="light-content" backgroundColor="transparent" />
       <View style={{ flex: 1 }}>
-        <Navigation />
+        <UserContext>
+          <Navigation />
+        </UserContext>
       </View>
     </SafeAreaProvider>
   )

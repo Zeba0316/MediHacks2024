@@ -6,15 +6,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import WelcomeScreen from '../Screens/Welcome'
 import Login from '../Screens/Login'
 import SignUp from '../Screens/SignUp'
-import Home from '../Screens/Home'
 import Verification from "../Screens/Verification";
+import ProfileBuild from "../Screens/ProfileBuild";
+import Home from '../Screens/Home'
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
   return (
     <View style={{ flex: 1 }}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Verification">
+        <Stack.Navigator initialRouteName="Welcome">
           <Stack.Screen
             name="Welcome"
             component={WelcomeScreen}
@@ -39,6 +40,11 @@ const Navigation = () => {
           <Stack.Screen
             name="Verification"
             component={Verification}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ProfileBuild"
+            component={ProfileBuild}
             options={{ headerShown: false }}
           />
           <Stack.Screen name="Home" component={Home} options={{

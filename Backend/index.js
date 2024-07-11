@@ -94,9 +94,54 @@ app.post("/login", (req, res) => {
         }
         const token = createToken(user._id);
         console.log("login successful");
-        return res.status(200).json({ token });
+        return res.status(200).json({ token: token });
     }).catch((err) => {
         console.log("Error while finding the user", err);
         return res.status(500).json({ message: "Some Error Occured" });
     })
+})
+
+// api endpoint for Verification Screen:
+app.post("/verification/:userId", upload.single("image"), async (req, res) => {
+    const userId = req.params.userId;
+    const { flag } = req.body;
+    const image = req.file;
+    const uniqueImageName = `${uuidv4()}-${image.originalname}`;
+    console.log("entered");
+    try {
+        await User.findByIdAndUpdate(userId, {
+            $set: {
+                imageVerify: {
+                    name: uniqueImageName,
+                    data: image.buffer,
+                    contentType: image.mimetype
+                }
+            }
+        })
+        await User.findByIdAndUpdate(userId, {
+            $set: {
+                sentVerificationImage: true
+            }
+        })
+        console.log("added and set true");
+        return res.status(200).json({ message: "Image Uploaded on DB For Verification" });
+    }
+    catch (err) {
+        console.log("error in uploading the image to the DB for Verification: ", err);
+        return res.status(500).json({ message: "Error in uploading the image to database" })
+    }
+})
+
+// endpoint for checking if verification image uploaded
+app.get("/hasSent/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    console.log("heyyyy");
+    try {
+        const user = await User.findById({ _id: userId });
+        return res.status(200).json({ sentVerificationImage: user.sentVerificationImage,profileBuilt:user.profileBuilt });
+    }
+    catch (err) {
+        console.log("error in getting the sentVerificationImage:", err);
+        return res.status(500).json({ message: "error in getting the sentVerificationImage" });
+    }
 })

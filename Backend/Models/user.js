@@ -22,12 +22,34 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     image: {
-        name: { type: String, required: true, unique: true },
+        name: { type: String, required: true,  },
         data: { type: Buffer, required: true },
         contentType: { type: String, required: true },
     },
+    imageVerify: {
+        name: { type: String, },
+        data: { type: Buffer, },
+        contentType: { type: String, },
+    },
+    sentVerificationImage: {
+        type: Boolean,
+        default: false
+    },
+    profileBuilt: {
+        type: Boolean,
+        default: false
+    },
     stage: {
         type: String,
+    },
+    emergencyNumber1: {
+        type: Number,
+    },
+    emergencyNumber2: {
+        type: Number,
+    },
+    emergencyNumber2: {
+        type: Number,
     },
     groups: [{
         type: String,

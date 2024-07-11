@@ -1,7 +1,8 @@
 import { View, Text, TouchableOpacity, TextInput, LayoutAnimation, Animated, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Alert } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { decode as atob } from 'base-64';
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 // icons import
 import { FontAwesome } from '@expo/vector-icons';
@@ -10,10 +11,12 @@ import { Video } from 'expo-av'
 import axios from 'axios'
 import { BackdropBlur, BackdropFilter, Blur, BlurMask, Canvas, ColorMatrix, Fill, Image, useImage } from '@shopify/react-native-skia'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { userType } from '../UserContext'
 const Login = () => {
     // navigation Hook and Focus: 
     const navigation = useNavigation();
     const focus = useIsFocused();
+    const { userId, setUserId } = useContext(userType);
     // SERVER URL:
     const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
 
@@ -25,27 +28,47 @@ const Login = () => {
         username: '',
         pass: '',
     })
+    const [flag, setFlag] = useState(false);
     const animatedUser = useRef(new Animated.Value(0)).current;
     const animatedPass = useRef(new Animated.Value(0)).current;
 
-    //Navigate Home If Already Logged In: 
     useEffect(() => {
-        const alreadyLogIn = async () => {
-            try {
-                const token = await AsyncStorage.getItem("authToken");
-                if (token) {
-                    navigation.navigate("Home");
+        if (flag) {
+            console.log(userId);
+            verify();
+            setFlag(!flag)
+        }
+    }, [flag])
+
+    // decode token and setUser id:
+    const decode = async (token) => {
+        const decodedToken = await JSON.parse(atob(token.split('.')[1]));
+        setUserId(decodedToken.userId);
+    }
+    // check verification image already sent or not:
+    const verify = async () => {
+        try {
+            const res = await axios.get(`${serverUrl}/hasSent/${userId}`);
+            if (res.status === 200) {
+                if (res.data.sentVerificationImage) {
+                    console.log(res.data.sentVerificationImage);
+                    if (res.data.profileBuilt) {
+                        navigation.navigate("Home");
+                    }
+                    else{
+                        navigation.navigate("ProfileBuild");
+                    }
+                }
+                else {
+                    console.log(res.data.sentVerificationImage);
+                    navigation.navigate("Verification");
                 }
             }
-            catch (err) {
-                console.log("Error : ", err);
-            }
-
         }
-        if (focus) {
-            alreadyLogIn();
+        catch (err) {
+            console.log("Error in checking if verification image sent or not : ", err);
         }
-    }, [focus])
+    }
 
     // Login button press function:
     const sendDetails = async () => {
@@ -62,8 +85,10 @@ const Login = () => {
             if (res.status === 200) {
                 setloginDetails({ username: '', pass: '' });
                 const token = res.data.token;
-                AsyncStorage.setItem("authToken", token);
-                navigation.navigate("Home");
+                await AsyncStorage.setItem("authToken", token);
+                await decode(token);
+                setFlag(true);
+
             } else {
                 Alert.alert("Error in Signing In", res.data.message);
             }

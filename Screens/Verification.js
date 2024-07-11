@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
+import { userType } from "../UserContext"
 import { MaterialIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 const Verification = () => {
+    // states , context , navigation and server url:
+    const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
+    const navigation = useNavigation();
+    const { userId, } = useContext(userType);
     const [imageUri, setImageUri] = useState(null);
+
+    console.log("verification screen : ", userId);
 
     const pickImage = async () => {
         let result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [3, 4],
-            quality: 1,
-            mirrorImage: true,
+            aspect: [1, 1],
+            quality: 0.5,
         });
 
         if (!result.canceled) {
@@ -27,7 +35,24 @@ const Verification = () => {
     };
 
     const postImage = async () => {
-        return;
+        const formData = new FormData();
+        formData.append("image", {
+            uri: imageUri,
+            name: 'photo.jpg',
+            type: 'image/jpeg',
+        });
+        formData.append("flag", true);
+        const res = await axios.post(`${serverUrl}/verification/${userId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        if (res.status === 200) {
+            console.log("verification image submitted successfully!");
+            navigation.navigate("ProfileBuild");
+        } else {
+            Alert.alert("Error In Submitting Image", res.data.message);
+        }
     }
 
     const handleSubmit = () => {

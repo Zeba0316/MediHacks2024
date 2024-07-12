@@ -1,11 +1,15 @@
-import React, { useLayoutEffect, useState, useEffect } from 'react';
+import React, { useLayoutEffect, useState, useEffect, useContext } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as ImagePicker from 'expo-image-picker';
+import { userType } from "../UserContext";
+import axios from 'axios';
 
 const Post = () => {
+    const { userId } = useContext(userType);
+    const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
     const navigation = useNavigation();
     const [img, setImg] = useState(null);
     const [you, setYou] = useState(true);
@@ -22,14 +26,19 @@ const Post = () => {
                 fontWeight: "bold"
             },
             headerLeft: () => (
-                <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => navigation.goBack()}>
+                <TouchableOpacity style={{ marginRight: 15 }} onPress={() => navigation.goBack()}>
                     <Entypo name="cross" size={30} color="white" />
+                </TouchableOpacity>
+            ),
+            headerRight: () => (
+                <TouchableOpacity style={{ marginRight: 10 }} onPress={handleSubmit}>
+                    <Text style={{ color: "white", fontSize: 18, fontWeight: "500" }}>Submit</Text>
                 </TouchableOpacity>
             ),
             headerStyle: {
                 backgroundColor: "rgba(40,40,40,0.98)",
             },
-        })
+        });
     }, [navigation]);
 
     useEffect(() => {
@@ -56,10 +65,51 @@ const Post = () => {
         }
     };
 
+    const handleSubmit = async () => {
+        const trimmedTitle = title.trim();
+        const trimmedDescription = description.trim();
+
+        if (!trimmedTitle || !trimmedDescription || !img) {
+            Alert.alert("Fill all fields", "Please fill the Title and Description!");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('image', {
+            uri: img,
+            name: 'photo.jpg',
+            type: 'image/jpeg',
+        });
+        formData.append('userId', userId);
+        formData.append('title', trimmedTitle);
+        formData.append('description', trimmedDescription);
+        formData.append('isAnonymous', anonymous);
+
+        try {
+            const res = await axios.post(`${serverUrl}/postBlog`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            if (res.status === 200) {
+                setTitle('');
+                setDescription('');
+                setImg(null);
+                Alert.alert("Success", res.data.message);
+                navigation.goBack();
+            } else {
+                Alert.alert("Error in Posting", res.data.message);
+            }
+        } catch (error) {
+            Alert.alert("Error in Posting, Please Try Again Later");
+            console.error("Error:", error);
+        }
+    };
+
     return (
         <ScrollView
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ flexGrow: 1, backgroundColor: "rgba(29,20,21,1)", paddingVertical: 15, paddingHorizontal: 15, gap: 20 }}
+            contentContainerStyle={{ flexGrow: 1, backgroundColor: "rgba(29,20,21,1)", paddingVertical: 15, paddingHorizontal: 15, gap: 10 }}
         >
             <View style={{ height: hp("7%"), width: "100%", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                 <View style={{ height: "80%", borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.4)', borderRadius: 20, justifyContent: "center", alignItems: "center", paddingHorizontal: 15 }}>
@@ -77,7 +127,7 @@ const Post = () => {
 
             {/* Title Input */}
             <View style={{ width: "100%", alignSelf: "center", marginTop: 20 }}>
-                <Text style={{ color: 'white', fontSize: 21, fontWeight: "600" }}>Title</Text>
+                <Text style={{ color: 'white', fontSize: 21, fontWeight: "600" }}>Title *</Text>
                 <TextInput
                     style={{
                         backgroundColor: 'rgba(255,255,255,0.1)',
@@ -96,7 +146,7 @@ const Post = () => {
 
             {/* Description Textarea */}
             <View style={{ width: "100%", alignSelf: "center", marginTop: 20 }}>
-                <Text style={{ color: 'white', fontSize: 21, fontWeight: "600" }}>Description</Text>
+                <Text style={{ color: 'white', fontSize: 21, fontWeight: "600" }}>Description *</Text>
                 <TextInput
                     style={{
                         backgroundColor: 'rgba(255,255,255,0.1)',
@@ -105,11 +155,11 @@ const Post = () => {
                         color: 'white',
                         fontSize: 18,
                         marginTop: 10,
-                        height: 150,  // Adjust height as needed
-                        textAlignVertical: 'top'  // Ensure text starts from top
+                        height: 150,
+                        textAlignVertical: 'top'
                     }}
                     multiline
-                    numberOfLines={4}  // Adjust as needed
+                    numberOfLines={4}
                     placeholder="Enter description..."
                     placeholderTextColor="rgba(255,255,255,0.5)"
                     value={description}
@@ -125,7 +175,7 @@ const Post = () => {
 
             {/* Display Selected Image */}
             {img && (
-                <Image source={{ uri: img }} style={{ height: 150, width: "85%", alignSelf: "center", resizeMode: "cover", marginTop: 20 }} />
+                <Image source={{ uri: img }} style={{ height: 160, width: "88%", alignSelf: "center", resizeMode: "cover",borderWidth:1.5,borderColor:"rgba(241,195,224,1)" }} />
             )}
         </ScrollView>
     );

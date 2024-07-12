@@ -165,6 +165,19 @@ app.post("/profileData/:userId", async (req, res) => {
     }
 })
 
+// api endpoint for fetching userData:
+app.get("/getUserData/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const user = await User.findById(userId);
+        return res.status(200).json({ username: user.name, userImage: user.image });
+    }
+    catch (err) {
+        console.log("error in getting user data: ", err);
+        return res.status(500).json({ message: "error in getting user data" });
+    }
+})
+
 // api endpoint for fetching blogs:
 app.get("/blogs", async (req, res) => {
     try {
@@ -176,3 +189,6 @@ app.get("/blogs", async (req, res) => {
         return res.status(500).json({ message: "error in retrieving the blogs" });
     }
 })
+
+// api endpoints for posting blog:
+app

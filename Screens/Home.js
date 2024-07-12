@@ -8,13 +8,13 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 
 const Home = () => {
   // userId:
-  const { userId } = useContext(userType);
+  const { userId, setUserImage, setUserName, userName, userImage } = useContext(userType);
   const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
   const navigation = useNavigation();
   const focus = useIsFocused();
   // state array to store the blogs:
   const [blogsArr, setBlogsArr] = useState([]);
-  
+
   const buttonVisibility = useRef(new Animated.Value(1)).current;
   const translateY = useRef(new Animated.Value(0)).current;
   const lastScrollY = useRef(0);
@@ -29,6 +29,28 @@ const Home = () => {
   useEffect(() => {
     console.log("blog array: ", blogsArr);
   }, [blogsArr]);
+
+  useEffect(() => {
+    if (!userName) {
+      fetchUserData();
+    }
+    console.log("username", userName);
+  }, [userName])
+
+  const fetchUserData = async () => {
+    try {
+      const res = await axios.get(`${serverUrl}/getUserData/${userId}`);
+      if (res.status === 200) {
+        setUserName(res.data.username);
+        setUserImage(res.data.userImage);
+        console.log("successfully retrieved user data on home screen");
+      }
+    }
+    catch (err) {
+      console.log("error in getting the user data", err);
+      alert("Failed to retrieve data", "please try to reload the app");
+    }
+  }
 
   // function to retrieve all the blogs from the database:
   const fetchBlogs = async () => {
@@ -85,34 +107,6 @@ const Home = () => {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
         <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
         {/* Add your blog list rendering here */}
       </ScrollView>

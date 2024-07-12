@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Platform, Alert, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, ScrollView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, Platform, Alert, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -121,28 +121,29 @@ const ProfileBuild = () => {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20, paddingTop: 20 }}>
-            <View style={{ marginBottom: 20 }}>
-              <Text style={{ color: 'white', marginBottom: 10 }}>Are you pregnant?</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity onPress={() => {
-                  handlePregnancyStatusChange('Pregnancy');
-                  setShowNumBabiesOptions(false);
-                }} style={styles.radioButton}>
-                  {pregnancyStatus === 'Pregnancy' && <View style={styles.radioInnerCircle} />}
-                </TouchableOpacity>
-                <Text style={{ color: 'white', marginLeft: 10 }}>Pregnancy</Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                <TouchableOpacity onPress={() => {
-                  handlePregnancyStatusChange('MotherHood');
-                  setShowNumBabiesOptions(false);
-                }} style={styles.radioButton}>
-                  {pregnancyStatus === 'MotherHood' && <View style={styles.radioInnerCircle} />}
-                </TouchableOpacity>
-                <Text style={{ color: 'white', marginLeft: 10 }}>MotherHood</Text>
+            <View style={{ marginBottom: 15 }}>
+              <Text style={{ color: "rgba(241,194,224,0.90)", fontSize: 24, textAlign: "center", marginBottom: 20, textShadowColor: "white", textShadowRadius: 8 }}>Choose Status</Text>
+              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
+                <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: "center", }}>
+                  <TouchableOpacity onPress={() => {
+                    handlePregnancyStatusChange('Pregnancy');
+                    setShowNumBabiesOptions(false);
+                  }} style={{ ...styles.radioButton, borderColor: pregnancyStatus === 'Pregnancy' ? "rgba(251,104,174,1)" : "white", backgroundColor: pregnancyStatus === 'Pregnancy' ? "white" : "lightgrey" }}>
+                    <Image source={require("../assets/pregnancy.png")} style={{ height: "100%", width: "57%", resizeMode: "cover" }} />
+                  </TouchableOpacity>
+                  <Text style={{ color: 'white', marginLeft: 10 }}>Pregnancy</Text>
+                </View>
+                <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: "center" }}>
+                  <TouchableOpacity onPress={() => {
+                    handlePregnancyStatusChange('MotherHood');
+                    setShowNumBabiesOptions(false);
+                  }} style={{ ...styles.radioButton, borderColor: pregnancyStatus === 'MotherHood' ? "rgba(251,104,174,1)" : "white", backgroundColor: pregnancyStatus === 'MotherHood' ? "white" : "lightgrey" }}>
+                    <Image source={require("../assets/motherhoodOption.png")} style={{ height: "100%", width: "100%", resizeMode: "contain" }} />
+                  </TouchableOpacity>
+                  <Text style={{ color: 'white', marginLeft: 10 }}>MotherHood</Text>
+                </View>
               </View>
             </View>
-
             {pregnancyStatus === 'Pregnancy' && (
               <View>
                 <TouchableOpacity onPress={showDatepicker} style={styles.datePickerButton}>
@@ -223,19 +224,16 @@ const ProfileBuild = () => {
 
 const styles = {
   radioButton: {
-    height: 20,
-    width: 20,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: 'white',
+    height: 60,
+    width: 60,
+    borderRadius: 100,
+    borderWidth: 2.5,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  radioInnerCircle: {
-    height: 12,
-    width: 12,
-    borderRadius: 6,
-    backgroundColor: 'white',
+    marginBottom: 10,
+    padding: 3,
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    overflow: "hidden"
   },
   datePickerButton: {
     height: 40,

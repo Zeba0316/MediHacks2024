@@ -144,3 +144,22 @@ app.get("/hasSent/:userId", async (req, res) => {
         return res.status(500).json({ message: "error in getting the sentVerificationImage" });
     }
 })
+
+// api endpoint for handling profile details postReq:
+app.post("/profileData/:userId", async (req, res) => {
+    const { userId } = req.params;
+    const { emergencyPhone1, emergencyPhone2, pregnancyStatus, birthPlan, numBabies, dueDate, profileBuilt } = req.body;
+    try {
+        await User.findByIdAndUpdate(userId, {
+            $set: {
+                emergencyPhone1, emergencyPhone2, pregnancyStatus, birthPlan, numBabies, dueDate, profileBuilt
+            }
+        })
+        console.log("Profile Details Sent Successfully");
+        return res.status(200).json({ message: "Profile Details Sent Successfully" });
+    }
+    catch (err) {
+        console.log("error in sending profile data:", err);
+        return res.status(500).json({ message: "error in sending profile details" })
+    }
+})

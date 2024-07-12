@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     image: {
-        name: { type: String, required: true,  },
+        name: { type: String, required: true, },
         data: { type: Buffer, required: true },
         contentType: { type: String, required: true },
     },
@@ -39,17 +39,23 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    stage: {
+    pregnancyStatus: {
         type: String,
     },
-    emergencyNumber1: {
+    emergencyPhone1: {
         type: Number,
     },
-    emergencyNumber2: {
+    emergencyPhone2: {
         type: Number,
     },
-    emergencyNumber2: {
+    numBabies: {
         type: Number,
+    },
+    birthPlan: {
+        type: String,
+    },
+    dueDate: {
+        type: String,
     },
     groups: [{
         type: String,

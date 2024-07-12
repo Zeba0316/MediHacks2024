@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, TextInput, Platform, Alert, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { userType } from "../UserContext"
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const ProfileBuild = () => {
+  const { userId } = useContext(userType);
+  const navigation = useNavigation();
   const [pregnancyStatus, setPregnancyStatus] = useState('');
   const [dueDate, setDueDate] = useState(null);
   const [numBabies, setNumBabies] = useState('');
@@ -15,7 +20,8 @@ const ProfileBuild = () => {
   const [showNumBabiesOptions, setShowNumBabiesOptions] = useState(false); // State for showing number of babies options
   const [selectedBirthPlanOption, setSelectedBirthPlanOption] = useState(null); // Selected birth plan option
   const [selectedNumBabiesOption, setSelectedNumBabiesOption] = useState(null); // Selected number of babies option
-
+  const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
+  console.log(userId);
   const birthPlanOptions = [
     { id: '1', label: 'Natural Birth' },
     { id: '2', label: 'Cesarean Section' },
@@ -27,10 +33,9 @@ const ProfileBuild = () => {
   const numBabiesOptions = [
     { id: '1', label: 'Single' },
     { id: '2', label: 'Twins' },
-    { id: '3', label: 'More' },
   ];
 
-  const handleSaveProfile = () => {
+  const handleSaveProfile = async () => {
     if (validateForm()) {
       console.log({
         pregnancyStatus,
@@ -40,7 +45,18 @@ const ProfileBuild = () => {
         emergencyPhone1,
         emergencyPhone2,
       });
-      // Implement save logic here
+      try {
+        const res = await axios.post(`${serverUrl}/profileData/${userId}`, { emergencyPhone1, emergencyPhone2, pregnancyStatus, birthPlan, numBabies, dueDate, profileBuilt: true });
+        if (res.status === 200) {
+          console.log("Details Successfully Sent!");
+          navigation.navigate("Home");
+        }
+      }
+      catch (err) {
+        console.log("error in sending details", err);
+        Alert.alert("Failed To Send Data", "Error occurred Please Try Again");
+      }
+
     } else {
       Alert.alert('Validation Error', 'Please fill in all required fields.');
     }

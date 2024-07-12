@@ -4,7 +4,7 @@ const blogSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    heading: {
+    title: {
         type: String,
         require: true
     },
@@ -15,6 +15,10 @@ const blogSchema = new mongoose.Schema({
         name: { type: String, required: true, },
         data: { type: Buffer, required: true },
         contentType: { type: String, required: true },
+    },
+    isAnonymous: {
+        type: Boolean,
+        default: false
     },
     comments: [
         {
@@ -28,6 +32,7 @@ const blogSchema = new mongoose.Schema({
             }
         }
     ]
+
 })
 const Blog = mongoose.model("Blog", blogSchema);
 module.exports = Blog;

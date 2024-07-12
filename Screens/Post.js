@@ -69,8 +69,8 @@ const Post = () => {
         const trimmedTitle = title.trim();
         const trimmedDescription = description.trim();
 
-        if (!trimmedTitle || !trimmedDescription || !img) {
-            Alert.alert("Fill all fields", "Please fill the Title and Description!");
+        if (!trimmedTitle || !trimmedDescription) {
+            Alert.alert("Fill the necessary fields", "Please fill the Title and Description!");
             return;
         }
 
@@ -117,7 +117,7 @@ const Post = () => {
                 </View>
                 <View style={{ flexDirection: "row", flex: 1, height: "100%", justifyContent: "flex-end", alignItems: "center", gap: 15 }}>
                     <TouchableOpacity onPress={() => { setYou(true); setAnonymous(false); }} style={{ height: 55, width: 55, justifyContent: "center", alignItems: "center", borderRadius: 100, borderWidth: you ? 2 : 0, borderColor: "rgba(241,195,214,1)", padding: 2, overflow: "hidden" }}>
-                        <Image source={{ uri: `${serverUrl}/images/${userImage.name}` }} style={{ height: "85%", width: "85%", resizeMode: "cover",borderRadius:100 }} />
+                        <Image source={{ uri: `${serverUrl}/images/${userImage.name}` }} style={{ height: "85%", width: "85%", resizeMode: "cover", borderRadius: 100 }} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { setYou(false); setAnonymous(true); }} style={{ height: 55, width: 55, justifyContent: "center", alignItems: "center", borderRadius: 100, borderWidth: anonymous ? 2 : 0, borderColor: "rgba(241,195,214,1)", padding: 2, overflow: "hidden" }}>
                         <Image source={require('../assets/anonymous.jpg')} style={{ height: "85%", width: "85%", resizeMode: "cover", borderRadius: 100 }} />

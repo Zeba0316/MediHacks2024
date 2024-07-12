@@ -206,4 +206,4 @@ app.get("/blogs", async (req, res) => {
 })
 
 // api endpoints for posting blog:
-app
+app.post()

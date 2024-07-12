@@ -34,6 +34,7 @@ mongoose.connect(`mongodb+srv://raza:${passDb}@cluster0.euagu12.mongodb.net/`, {
 
 // Importing Models:
 const User = require("./Models/user");
+const Blog = require("./Models/Blog");
 
 // Multer Setup 
 const storage = multer.memoryStorage();
@@ -161,5 +162,17 @@ app.post("/profileData/:userId", async (req, res) => {
     catch (err) {
         console.log("error in sending profile data:", err);
         return res.status(500).json({ message: "error in sending profile details" })
+    }
+})
+
+// api endpoint for fetching blogs:
+app.get("/blogs", async (req, res) => {
+    try {
+        const blogs = await Blog.find({});
+        return res.status(200).json({ blogs });
+    }
+    catch (err) {
+        console.log("error in retrieving the blogs:", err);
+        return res.status(500).json({ message: "error in retrieving the blogs" });
     }
 })

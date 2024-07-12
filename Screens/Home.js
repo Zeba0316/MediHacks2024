@@ -6,8 +6,6 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
-const { height } = Dimensions.get('window');
-
 const Home = () => {
   // userId:
   const { userId } = useContext(userType);
@@ -16,6 +14,7 @@ const Home = () => {
   const focus = useIsFocused();
   // state array to store the blogs:
   const [blogsArr, setBlogsArr] = useState([]);
+  
   const buttonVisibility = useRef(new Animated.Value(1)).current;
   const translateY = useRef(new Animated.Value(0)).current;
   const lastScrollY = useRef(0);
@@ -36,8 +35,8 @@ const Home = () => {
     try {
       const res = await axios.get(`${serverUrl}/blogs`);
       if (res.status === 200) {
-        setBlogsArr(res.data);
-        console.log("checking the res array on Home: ", res.data);
+        setBlogsArr(res.data.blogs);
+        console.log("checking the res array on Home: ", res.data.blogs);
       }
     } catch (err) {
       console.log("error in retrieving the blogs", err);
@@ -84,6 +83,7 @@ const Home = () => {
         contentContainerStyle={{ flexGrow: 1, alignItems: "center", paddingVertical: 5 }}
         onScroll={handleScroll}
         scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
       >
         <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
         <Text style={{ color: "white", fontSize: 20 }}>Home</Text>

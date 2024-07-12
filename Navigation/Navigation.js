@@ -9,6 +9,7 @@ import SignUp from '../Screens/SignUp'
 import Verification from "../Screens/Verification";
 import ProfileBuild from "../Screens/ProfileBuild";
 import Home from '../Screens/Home'
+import Post from '../Screens/Post'
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
@@ -50,6 +51,7 @@ const Navigation = () => {
           <Stack.Screen name="Home" component={Home} options={{
             headerShown: false
           }} />
+          <Stack.Screen name="Post" component={Post} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

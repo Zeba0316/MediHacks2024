@@ -135,10 +135,9 @@ app.post("/verification/:userId", upload.single("image"), async (req, res) => {
 // endpoint for checking if verification image uploaded
 app.get("/hasSent/:userId", async (req, res) => {
     const userId = req.params.userId;
-    console.log("heyyyy");
     try {
         const user = await User.findById({ _id: userId });
-        return res.status(200).json({ sentVerificationImage: user.sentVerificationImage,profileBuilt:user.profileBuilt });
+        return res.status(200).json({ sentVerificationImage: user.sentVerificationImage, profileBuilt: user.profileBuilt });
     }
     catch (err) {
         console.log("error in getting the sentVerificationImage:", err);

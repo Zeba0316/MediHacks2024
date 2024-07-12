@@ -131,7 +131,7 @@ const ProfileBuild = () => {
                   }} style={{ ...styles.radioButton, borderColor: pregnancyStatus === 'Pregnancy' ? "rgba(251,104,174,1)" : "white", backgroundColor: pregnancyStatus === 'Pregnancy' ? "white" : "lightgrey" }}>
                     <Image source={require("../assets/pregnancy.png")} style={{ height: "100%", width: "57%", resizeMode: "cover" }} />
                   </TouchableOpacity>
-                  <Text style={{ color: 'white', marginLeft: 10 }}>Pregnancy</Text>
+                  <Text style={{ color: pregnancyStatus === 'Pregnancy' ? 'rgba(241,144,224,0.90)' : 'white', fontSize: 16, marginLeft: 10 }}>Pregnancy</Text>
                 </View>
                 <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: "center" }}>
                   <TouchableOpacity onPress={() => {
@@ -140,7 +140,7 @@ const ProfileBuild = () => {
                   }} style={{ ...styles.radioButton, borderColor: pregnancyStatus === 'MotherHood' ? "rgba(251,104,174,1)" : "white", backgroundColor: pregnancyStatus === 'MotherHood' ? "white" : "lightgrey" }}>
                     <Image source={require("../assets/motherhoodOption.png")} style={{ height: "100%", width: "100%", resizeMode: "contain" }} />
                   </TouchableOpacity>
-                  <Text style={{ color: 'white', marginLeft: 10 }}>MotherHood</Text>
+                  <Text style={{ color: pregnancyStatus === 'MotherHood' ? 'rgba(241,144,224,0.90)' : 'white', fontSize: 16, marginLeft: 10 }}>MotherHood</Text>
                 </View>
               </View>
             </View>
@@ -213,7 +213,7 @@ const ProfileBuild = () => {
             />
 
             <TouchableOpacity onPress={handleSaveProfile} style={styles.saveButton}>
-              <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 18, fontWeight: '500', textShadowRadius: 8, textShadowColor: "rgba(255,255,255,0.6)" }}>Save Profile</Text>
+              <Text style={{ color: 'rgba(255,255,255,0.77)', fontSize: 18, fontWeight: '500', textShadowRadius: 8, textShadowColor: "rgba(255,255,255,0.5)" }}>Save Profile</Text>
             </TouchableOpacity>
           </ScrollView>
         </TouchableWithoutFeedback>
@@ -273,7 +273,7 @@ const styles = {
     alignItems: 'center',
     height: 50,
     borderRadius: 5,
-    marginBottom:25
+    marginBottom: 25
   },
 };
 

@@ -54,20 +54,17 @@ const createToken = (userId) => {
 // endpoint for Sign Up:
 app.post("/register", upload.single('image'), async (req, res) => {
     const { username, email, password } = req.body;
-    const image = req.file;
+    const { buffer, mimetype } = req.file;
     try {
-        if (!username || !email || !password || !image) {
-            return res.status(400).json({ message: "All fields are required!" });
-        }
-        const uniqueImageName = `${uuidv4()}-${image.originalname}`;
+
         const newUser = new User({
             name: username,
             email: email,
             password: password,
             image: {
-                name: uniqueImageName,
-                data: image.buffer,
-                contentType: image.mimetype
+                name: `${uuidv4()}.${mimetype.split('/')[1]}`,
+                data: buffer,
+                contentType: mimetype
             }
         });
         await newUser.save();
@@ -106,16 +103,15 @@ app.post("/login", (req, res) => {
 app.post("/verification/:userId", upload.single("image"), async (req, res) => {
     const userId = req.params.userId;
     const { flag } = req.body;
-    const image = req.file;
-    const uniqueImageName = `${uuidv4()}-${image.originalname}`;
+    const { buffer, mimetype } = req.file;
     console.log("entered");
     try {
         await User.findByIdAndUpdate(userId, {
             $set: {
                 imageVerify: {
-                    name: uniqueImageName,
-                    data: image.buffer,
-                    contentType: image.mimetype
+                    name: `${uuidv4()}.${mimetype.split('/')[1]}`,
+                    data: buffer,
+                    contentType: mimetype
                 }
             }
         })
@@ -177,6 +173,25 @@ app.get("/getUserData/:userId", async (req, res) => {
         return res.status(500).json({ message: "error in getting user data" });
     }
 })
+
+// fetch images:
+app.get('/images/:name', async (req, res) => {
+    const { name } = req.params;
+    try {
+        // Find user with matching image name
+        const user = await User.findOne({ 'image.name': name });
+        if (!user || !user.image) {
+            return res.status(404).json({ success: false, message: 'Image not found.' });
+        }
+
+        // Set content type and send image data
+        res.set('Content-Type', user.image.contentType);
+        res.send(user.image.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Failed to fetch image.' });
+    }
+});
 
 // api endpoint for fetching blogs:
 app.get("/blogs", async (req, res) => {

@@ -8,7 +8,7 @@ import { userType } from "../UserContext";
 import axios from 'axios';
 
 const Post = () => {
-    const { userId } = useContext(userType);
+    const { userId, userName, userImage } = useContext(userType);
     const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
     const navigation = useNavigation();
     const [img, setImg] = useState(null);
@@ -113,13 +113,13 @@ const Post = () => {
         >
             <View style={{ height: hp("7%"), width: "100%", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                 <View style={{ height: "80%", borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.4)', borderRadius: 20, justifyContent: "center", alignItems: "center", paddingHorizontal: 15 }}>
-                    <Text style={{ color: "rgba(241,195,224,1)", fontSize: 18, fontWeight: "400" }}>{you ? "Raza" : "Anonymous"}</Text>
+                    <Text style={{ color: "rgba(241,195,224,1)", fontSize: 18, fontWeight: "400" }}>{you ? userName : "Anonymous"}</Text>
                 </View>
                 <View style={{ flexDirection: "row", flex: 1, height: "100%", justifyContent: "flex-end", alignItems: "center", gap: 15 }}>
-                    <TouchableOpacity onPress={() => { setYou(true); setAnonymous(false); }} style={{ height: 55, width: 55, justifyContent: "center", alignItems: "center", borderRadius: 100, borderWidth: you ? 2 : 0, borderColor: "rgba(241,195,214,1)", padding: 3, overflow: "hidden" }}>
-                        <Image source={require('../assets/favicon.png')} style={{ height: "85%", width: "85%", resizeMode: "cover" }} />
+                    <TouchableOpacity onPress={() => { setYou(true); setAnonymous(false); }} style={{ height: 55, width: 55, justifyContent: "center", alignItems: "center", borderRadius: 100, borderWidth: you ? 2 : 0, borderColor: "rgba(241,195,214,1)", padding: 2, overflow: "hidden" }}>
+                        <Image source={{ uri: `${serverUrl}/images/${userImage.name}` }} style={{ height: "85%", width: "85%", resizeMode: "cover",borderRadius:100 }} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { setYou(false); setAnonymous(true); }} style={{ height: 55, width: 55, justifyContent: "center", alignItems: "center", borderRadius: 100, borderWidth: anonymous ? 2 : 0, borderColor: "rgba(241,195,214,1)", padding: 3, overflow: "hidden" }}>
+                    <TouchableOpacity onPress={() => { setYou(false); setAnonymous(true); }} style={{ height: 55, width: 55, justifyContent: "center", alignItems: "center", borderRadius: 100, borderWidth: anonymous ? 2 : 0, borderColor: "rgba(241,195,214,1)", padding: 2, overflow: "hidden" }}>
                         <Image source={require('../assets/anonymous.jpg')} style={{ height: "85%", width: "85%", resizeMode: "cover", borderRadius: 100 }} />
                     </TouchableOpacity>
                 </View>
@@ -175,7 +175,7 @@ const Post = () => {
 
             {/* Display Selected Image */}
             {img && (
-                <Image source={{ uri: img }} style={{ height: 160, width: "88%", alignSelf: "center", resizeMode: "cover",borderWidth:1.5,borderColor:"rgba(241,195,224,1)" }} />
+                <Image source={{ uri: `${serverUrl}/images/${userImage.name}` }} style={{ height: 160, width: "88%", alignSelf: "center", resizeMode: "cover", borderWidth: 1.5, borderColor: "rgba(241,195,224,1)" }} />
             )}
         </ScrollView>
     );

@@ -273,6 +273,7 @@ const styles = {
     alignItems: 'center',
     height: 50,
     borderRadius: 5,
+    marginBottom:25
   },
 };
 

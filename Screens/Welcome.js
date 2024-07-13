@@ -81,10 +81,10 @@ const WelcomeScreen = () => {
         if (sent !== null) {
             console.log('val:', sent);
             if (sent) {
-                if(profile){
+                if (profile) {
                     navigation.navigate("Home");
                 }
-                else{
+                else {
                     navigation.navigate("ProfileBuild");
                 }
             } else {

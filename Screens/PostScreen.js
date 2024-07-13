@@ -10,8 +10,8 @@ import { userType } from '../UserContext';
 const PostScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
-    const { id, name, userImageName, title, description, isAnonymous, imageSent, imageName, userHasLiked,viaComment } = route.params;
-    const { userName } = useContext(userType);
+    const { id, name, userImageName, title, description, isAnonymous, imageSent, imageName, userHasLiked, viaComment } = route.params;
+    const { userName, userImage } = useContext(userType);
     const [commentsArr, setCommentsArr] = useState([]);
     const [commentInp, setCommentInp] = useState('');
     const [reload, setReload] = useState(false);
@@ -57,8 +57,10 @@ const PostScreen = () => {
     }, []);
 
     useEffect(() => {
-        if(viaComment){
+        console.log(userImage.name);
+        if (viaComment) {
             scrollRef.current.scrollToEnd();
+            
         }
         if (userLiked === null) {
             console.log("changed the state");
@@ -86,7 +88,7 @@ const PostScreen = () => {
                 console.log("cant send empty msg");
                 return;
             }
-            const res = await axios.post(`${serverUrl}/comment/${id}`, { name, userImageName, commentInp: trimmedComment });
+            const res = await axios.post(`${serverUrl}/comment/${id}`, { name: userName, userImageName: userImage.name, commentInp: trimmedComment });
             if (res.status === 200) {
                 console.log("comment sent successfully!");
                 setCommentInp('');
@@ -189,11 +191,11 @@ const PostScreen = () => {
                             <View key={index} style={{ marginBottom: 12, alignItems: "center", width: "80%" }}>
                                 <View style={{ flexDirection: "row", width: "100%", alignItems: "center", justifyContent: "flex-start", marginBottom: 5 }}>
                                     <View style={{ height: 30, width: 30, borderWidth: 0.8, borderRadius: 100, borderColor: "pink", alignItems: "center", justifyContent: "center" }}>
-                                        <Image style={{ height: 25, width: 25, borderRadius: 100 }} source={{ uri: `${serverUrl}/images/${userImageName}` }} />
+                                        <Image style={{ height: 25, width: 25, borderRadius: 100 }} source={{ uri: `${serverUrl}/images/${comment.imageUser}` }} />
                                     </View>
                                     <Text style={{ color: "pink", fontSize: 14, fontWeight: "500", marginLeft: 10 }}>{comment.user}</Text>
                                 </View>
-                                <View style={{ width: "85%", backgroundColor: comment.user === name ? "rgba(241,194,224,0.35)" : "rgba(255,255,255,0.25)", paddingVertical: 10, paddingHorizontal: 15, marginLeft: 28, borderRadius: 14, borderTopLeftRadius: 0, }}>
+                                <View style={{ width: "85%", backgroundColor: "rgba(241,194,224,0.35)", paddingVertical: 10, paddingHorizontal: 15, marginLeft: 28, borderRadius: 14, borderTopLeftRadius: 0, }}>
                                     <Text style={{ color: "white", fontSize: 16, fontWeight: "400" }}>{comment.comment}</Text>
                                 </View>
                             </View>

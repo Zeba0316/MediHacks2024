@@ -263,3 +263,36 @@ app.post("/postBlog", upload.single("image"), async (req, res) => {
         return res.status(500).json({ message: "Error in saving the post to DB" });
     }
 });
+
+// api endpoint for liking a post:
+app.post("/liked/:id", async (req, res) => {
+    const postId = req.params.id;
+    const { liked, userName } = req.body;
+    try {
+        if (liked === false) {
+            await Blog.findByIdAndUpdate(postId, {
+                $addToSet: {
+                    likes: {
+                        likedUser: userName
+                    }
+                }
+            });
+            console.log("changed to true");
+        }
+        else {
+            await Blog.findByIdAndUpdate(postId, {
+                $pull: {
+                    likes: {
+                        likedUser: userName
+                    }
+                }
+            });
+            console.log("changed to false");
+        }
+        return res.status(200).json({ message: "Like field chnaged!" })
+    }
+    catch (err) {
+        console.log("Error in changing the like of post: ", err);
+        return res.status(500).json({ message: "Error in changing the like of post" });
+    }
+})

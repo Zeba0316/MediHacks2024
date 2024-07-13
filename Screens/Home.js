@@ -17,12 +17,13 @@ const Home = () => {
   const translateY = useRef(new Animated.Value(0)).current;
   const lastScrollY = useRef(0);
   const [blogsArr, setBlogsArr] = useState([]);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     if (focus) {
       fetchBlogs();
     }
-  }, [focus]);
+  }, [focus, reload]);
 
   useEffect(() => {
     if (!userName) {
@@ -87,9 +88,14 @@ const Home = () => {
     }
     lastScrollY.current = currentScrollY;
   };
-  const handleLike = async (liked) => {
+  const handleLike = async (liked, id) => {
+    console.log("user has liked:",liked);
     try {
-
+      const res = await axios.post(`${serverUrl}/liked/${id}`, { liked, userName });
+      if (res.status === 200) {
+        console.log("like field changed!");
+        setReload(!reload);
+      }
     }
     catch (err) {
       console.log("Error in Liking the Post: ", err);
@@ -138,12 +144,12 @@ const Home = () => {
         <View style={{ height: 38, width: "92%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 10, marginVertical: 5, overflow: "hidden" }}>
           {/* Like Button */}
           <TouchableOpacity
-            onPress={() => { console.log("user has liked? : ", userHasLiked); }}
+            onPress={() => { handleLike(userHasLiked, item._id) }}
             style={{
               height: 38,
               width: 38,
               borderRadius: 100,
-              backgroundColor: userHasLiked ? "rgba(255,0,0,0.5)" : "rgba(255,255,255,0.15)",
+              backgroundColor: userHasLiked ? "rgba(255,182,203,0.85)" : "rgba(255,255,255,0.15)",
               justifyContent: "center",
               alignItems: "center"
             }}

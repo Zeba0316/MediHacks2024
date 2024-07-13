@@ -10,6 +10,7 @@ import Verification from "../Screens/Verification";
 import ProfileBuild from "../Screens/ProfileBuild";
 import Home from '../Screens/Home'
 import Post from '../Screens/Post'
+import PostScreen from '../Screens/PostScreen'
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
@@ -52,6 +53,7 @@ const Navigation = () => {
             headerShown: false
           }} />
           <Stack.Screen name="Post" component={Post} />
+          <Stack.Screen name="PostScreen" component={PostScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

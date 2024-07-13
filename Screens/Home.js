@@ -89,7 +89,7 @@ const Home = () => {
     lastScrollY.current = currentScrollY;
   };
   const handleLike = async (liked, id) => {
-    console.log("user has liked:",liked);
+    console.log("user has liked:", liked);
     try {
       const res = await axios.post(`${serverUrl}/liked/${id}`, { liked, userName });
       if (res.status === 200) {
@@ -105,10 +105,11 @@ const Home = () => {
 
   const renderBlogItem = ({ item }) => {
     const userHasLiked = item.likes.some(like => like.likedUser === userName);
-
     return (
       <View style={{ width: "100%", alignItems: "center", marginBottom: 10 }}>
-        <TouchableOpacity activeOpacity={0.85} style={{ minHeight: hp("15%"), width: "90%", marginBottom: 10 }}>
+        <TouchableOpacity
+          onPress={() => { navigation.navigate("PostScreen", { id: item._id, title: item.title, description: item.description, name: item.name, userImageName: item.userImageName,isAnonymous:item.isAnonymous,imageSent:item.imageSent,imageName:item.image.name }) }}
+          activeOpacity={0.83} style={{ minHeight: hp("15%"), width: "90%", marginBottom: 10 }}>
           {/* Post creator info */}
           <View style={{ minHeight: hp("6%"), flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
             <View style={{ height: 52, width: 52, alignItems: "center", justifyContent: "center", borderRadius: 100, backgroundColor: "transparent", borderWidth: 1.8, borderColor: "pink" }}>

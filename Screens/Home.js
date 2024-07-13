@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Animated, Image } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Animated, Image, Alert } from 'react-native';
 import { userType } from '../UserContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -87,6 +87,15 @@ const Home = () => {
     }
     lastScrollY.current = currentScrollY;
   };
+  const handleLike = async (liked) => {
+    try {
+
+    }
+    catch (err) {
+      console.log("Error in Liking the Post: ", err);
+      Alert.alert("Couldn't Like", "Error in Liking the Post");
+    }
+  }
 
   const renderBlogItem = ({ item }) => {
     const userHasLiked = item.likes.some(like => like.likedUser === userName);
@@ -126,10 +135,10 @@ const Home = () => {
           )}
         </TouchableOpacity>
         {/* like and comments area */}
-        <View style={{ height: 38, width: "92%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 10, marginVertical: 5 ,overflow:"hidden"}}>
+        <View style={{ height: 38, width: "92%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 10, marginVertical: 5, overflow: "hidden" }}>
           {/* Like Button */}
           <TouchableOpacity
-            onPress={() => { }}
+            onPress={() => { console.log("user has liked? : ", userHasLiked); }}
             style={{
               height: 38,
               width: 38,
@@ -148,7 +157,7 @@ const Home = () => {
             <Text style={{ color: "rgba(255,255,255,0.82)", fontSize: 13.5 }}> Add your reply...</Text>
           </TouchableOpacity>
           <FontAwesome name="comment-o" size={23} color="rgba(255,255,255,0.4)" />
-          <Text style={{color:"rgba(255,255,255,0.4)",fontSize:13,marginLeft:-5}}>{item.comments.length}</Text>
+          <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 13, marginLeft: -5 }}>{item.comments.length}</Text>
         </View>
         {/* end of like and comments area */}
         {/* post end line */}

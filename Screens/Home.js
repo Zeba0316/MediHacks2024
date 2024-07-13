@@ -180,7 +180,7 @@ const Home = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "rgba(29,20,21,1)" }}>
       <View style={{ minHeight: hp("5.1%"), width: "100%", alignItems: "center", justifyContent: "flex-start" }}>
-        <Text style={{color:"rgba(255,255,255,0.9)",fontSize:hp("3.2%"),fontWeight:"500"}}>Explore</Text>
+        <Text style={{color:"pink",fontSize:hp("3.2%"),fontWeight:"500",textShadowRadius:8,textShadowColor:"rgba(255,255,255,0.3)"}}>Explore</Text>
       </View>
       <FlatList
         data={blogsArr}

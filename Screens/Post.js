@@ -16,6 +16,7 @@ const Post = () => {
     const [anonymous, setAnonymous] = useState(false);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [flag, setFLag] = useState(false);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -31,7 +32,7 @@ const Post = () => {
                 </TouchableOpacity>
             ),
             headerRight: () => (
-                <TouchableOpacity style={{ marginRight: 10 }} onPress={handleSubmit}>
+                <TouchableOpacity style={{ marginRight: 10 }} onPress={() => setFLag(true)}>
                     <Text style={{ color: "white", fontSize: 18, fontWeight: "500" }}>Submit</Text>
                 </TouchableOpacity>
             ),
@@ -39,7 +40,7 @@ const Post = () => {
                 backgroundColor: "rgba(40,40,40,0.98)",
             },
         });
-    }, [navigation]);
+    }, []);
 
     useEffect(() => {
         (async () => {
@@ -51,6 +52,12 @@ const Post = () => {
             }
         })();
     }, []);
+
+    useEffect(() => {
+        if (flag) {
+            handleSubmit();
+        }
+    }, [flag])
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -66,24 +73,35 @@ const Post = () => {
     };
 
     const handleSubmit = async () => {
+        console.log("handle submit started!");
         const trimmedTitle = title.trim();
         const trimmedDescription = description.trim();
+        console.log("Trimmed Title:", trimmedTitle);
+        console.log("Trimmed Description:", trimmedDescription);
 
         if (!trimmedTitle || !trimmedDescription) {
             Alert.alert("Fill the necessary fields", "Please fill the Title and Description!");
+            setFLag(false);
             return;
         }
 
         const formData = new FormData();
-        formData.append('image', {
-            uri: img,
-            name: 'photo.jpg',
-            type: 'image/jpeg',
-        });
-        formData.append('userId', userId);
+        if (img) {
+            formData.append('image', {
+                uri: img,
+                name: 'photo.jpg',
+                type: 'image/jpeg',
+            });
+            formData.append('imageSent',"true");
+        }
+        else {
+            formData.append('imageSent', "false");
+        }
+        formData.append('name', userName);
         formData.append('title', trimmedTitle);
         formData.append('description', trimmedDescription);
         formData.append('isAnonymous', anonymous);
+        formData.append('userImageName', userImage.name);
 
         try {
             const res = await axios.post(`${serverUrl}/postBlog`, formData, {
@@ -95,14 +113,17 @@ const Post = () => {
                 setTitle('');
                 setDescription('');
                 setImg(null);
-                Alert.alert("Success", res.data.message);
+                Alert.alert("Post Uploaded", res.data.message);
+                setFLag(false);
                 navigation.goBack();
             } else {
                 Alert.alert("Error in Posting", res.data.message);
+                setFLag(false);
             }
         } catch (error) {
             Alert.alert("Error in Posting, Please Try Again Later");
             console.error("Error:", error);
+            setFLag(false);
         }
     };
 
@@ -140,7 +161,7 @@ const Post = () => {
                     placeholder="Enter title..."
                     placeholderTextColor="rgba(255,255,255,0.5)"
                     value={title}
-                    onChangeText={setTitle}
+                    onChangeText={text => setTitle(text)}
                 />
             </View>
 
@@ -163,7 +184,7 @@ const Post = () => {
                     placeholder="Enter description..."
                     placeholderTextColor="rgba(255,255,255,0.5)"
                     value={description}
-                    onChangeText={setDescription}
+                    onChangeText={text => setDescription(text)}
                 />
             </View>
 
@@ -175,7 +196,7 @@ const Post = () => {
 
             {/* Display Selected Image */}
             {img && (
-                <Image source={{ uri: `${serverUrl}/images/${userImage.name}` }} style={{ height: 160, width: "88%", alignSelf: "center", resizeMode: "cover", borderWidth: 1.5, borderColor: "rgba(241,195,224,1)" }} />
+                <Image source={{ uri: img }} style={{ height: 160, width: "88%", alignSelf: "center", resizeMode: "cover", borderWidth: 1.5, borderColor: "rgba(241,195,224,1)" }} />
             )}
         </ScrollView>
     );

@@ -4,6 +4,10 @@ const blogSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    userImageName: {
+        type:String,
+        require:true
+    },
     title: {
         type: String,
         require: true
@@ -11,10 +15,14 @@ const blogSchema = new mongoose.Schema({
     description: {
         type: String,
     },
+    imageSent:{
+        type:Boolean,
+        require:true
+    },
     image: {
-        name: { type: String, required: true, },
-        data: { type: Buffer, required: true },
-        contentType: { type: String, required: true },
+        name: { type: String, },
+        data: { type: Buffer, },
+        contentType: { type: String, },
     },
     isAnonymous: {
         type: Boolean,

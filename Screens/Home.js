@@ -24,14 +24,10 @@ const Home = () => {
   }, [focus]);
 
   useEffect(() => {
-    console.log("blog array: ", blogsArr);
-  }, [blogsArr]);
-
-  useEffect(() => {
     if (!userName) {
       fetchUserData();
     }
-    console.log("username", userName, userImage);
+    console.log("username", userName);
   }, [userName, userImage]);
 
   const fetchUserData = async () => {
@@ -94,13 +90,26 @@ const Home = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "rgba(29,20,21,1)" }}>
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1, alignItems: "center", paddingVertical: 5 }}
+        contentContainerStyle={{ flexGrow: 1, alignItems: "center", gap: 5, paddingVertical: 5 }}
         onScroll={handleScroll}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
       >
         <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
-        {/* Add your blog list rendering here */}
+        {
+          blogsArr.map((blog, index) => {
+            return (
+              <View key={index} style={{ minHeight: hp("20%"), width: "90%", backgroundColor: "grey" }}>
+                {/* post creater info */}
+                <View style={{ height: hp("7%"), width: "100%", flexDirection: "row", gap: 10, alignItems: "center" }}>
+                  <Image style={{ height: 50, width: 50, borderRadius: 100, backgroundColor: "lightgrey" }} source={blog.isAnonymous?require("../assets/anonymous.jpg"):{uri:`${serverUrl}/images/${blog.userImageName}`}} />
+                  <Text style={{ color: 'white', fontSize: 16, fontWeight: "500" }}>{blog.name}</Text>
+                </View>
+                {/* end of post creater info */}
+              </View>
+            )
+          })
+        }
       </ScrollView>
       <Animated.View
         style={{

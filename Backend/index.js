@@ -206,4 +206,41 @@ app.get("/blogs", async (req, res) => {
 })
 
 // api endpoints for posting blog:
-app.post()
+app.post("/postBlog", upload.single("image"), async (req, res) => {
+    const { name, title, description, isAnonymous, imageSent, userImageName } = req.body;
+    console.log("Image sent: ", imageSent);
+
+    try {
+        if (imageSent === 'true') {
+            const { buffer, mimetype } = req.file;
+            const newBlog = new Blog({
+                name,
+                userImageName,
+                title,
+                description,
+                isAnonymous,
+                imageSent: true,
+                image: {
+                    name: `${uuidv4()}.${mimetype.split('/')[1]}`,
+                    data: buffer,
+                    contentType: mimetype
+                }
+            });
+            await newBlog.save();
+        } else {
+            const newBlog = new Blog({
+                name,
+                userImageName,
+                title,
+                description,
+                isAnonymous,
+                imageSent: false
+            });
+            await newBlog.save();
+        }
+        return res.status(200).json({ message: "Post saved in DB!" });
+    } catch (err) {
+        console.log("Error in saving the post to DB: ", err);
+        return res.status(500).json({ message: "Error in saving the post to DB" });
+    }
+});

@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, TouchableOpacity, Animated, Dimensions, Image } from 'react-native';
 import React, { useContext, useEffect, useState, useRef } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Animated, Image } from 'react-native';
 import { userType } from '../UserContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -11,11 +11,10 @@ const Home = () => {
   const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
   const navigation = useNavigation();
   const focus = useIsFocused();
-  const [blogsArr, setBlogsArr] = useState([]);
-
   const buttonVisibility = useRef(new Animated.Value(1)).current;
   const translateY = useRef(new Animated.Value(0)).current;
   const lastScrollY = useRef(0);
+  const [blogsArr, setBlogsArr] = useState([]);
 
   useEffect(() => {
     if (focus) {
@@ -48,8 +47,8 @@ const Home = () => {
     try {
       const res = await axios.get(`${serverUrl}/blogs`);
       if (res.status === 200) {
-        setBlogsArr(res.data.blogs);
-        console.log("checking the res array on Home: ", res.data.blogs);
+        const reversedBlogs = res.data.blogs.reverse();
+        setBlogsArr(reversedBlogs);
       }
     } catch (err) {
       console.log("error in retrieving the blogs", err);
@@ -87,44 +86,55 @@ const Home = () => {
     lastScrollY.current = currentScrollY;
   };
 
+  const renderBlogItem = ({ item }) => (
+    <View style={{ width: "100%", alignItems: "center", marginBottom: 10 }}>
+      <View style={{ minHeight: hp("15%"), width: "90%", marginBottom: 10 }}>
+        {/* Post creator info */}
+        <View style={{ minHeight: hp("6%"), flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
+          <View style={{ height:52,width:52,alignItems:"center",justifyContent:"center",borderRadius: 100, backgroundColor: "transparent", borderWidth: 1.8, borderColor: "pink"}}>
+            <Image
+              style={{ height: 45, width: 45, borderRadius: 100, backgroundColor: "lightgrey" }}
+              source={item.isAnonymous ? require("../assets/anonymous.jpg") : { uri: `${serverUrl}/images/${item.userImageName}` }}
+            />
+          </View>
+          <Text style={{ color: 'pink', fontSize: 16, fontWeight: "600", marginLeft: 10 }}>
+            {item.isAnonymous ? "Anonymous" : item.name}
+          </Text>
+        </View>
+        {/* end of post creator info */}
+        {/* Title */}
+        <Text numberOfLines={2} ellipsizeMode='tail' style={{ color: "white", fontSize: 22, fontWeight: "600", marginBottom: 5 }}>
+          {item.title}
+        </Text>
+        {/* end of title */}
+        {/* Description */}
+        <Text numberOfLines={2} ellipsizeMode='tail' style={{ color: "rgba(255,255,255,0.75)", fontSize: 17, marginBottom: 10 }}>
+          {item.description}
+        </Text>
+        {/* end of description */}
+        {/* ImagePost */}
+        {item.imageSent && (
+          <Image
+            style={{ height: 250, width: "100%", borderRadius: 10, backgroundColor: "rgba(255,255,255,0.1)", overflow: "hidden", }}
+            source={{ uri: `${serverUrl}/blogImage/${item.image.name}` }}
+          />
+        )}
+      </View>
+      <View style={{ height: 1.3, width: "100%", backgroundColor: 'rgba(255,255,255,0.15)', marginBottom: 0, marginTop: 5 }}></View>
+    </View>
+  );
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "rgba(29,20,21,1)" }}>
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1, alignItems: "center", gap: 5, paddingVertical: 5 }}
+      <FlatList
+        data={blogsArr}
+        renderItem={renderBlogItem}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={{ flexGrow: 1, paddingVertical: 5 }}
         onScroll={handleScroll}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
-      >
-        {
-          blogsArr.map((blog, index) => {
-            return (
-              <View key={index} style={{width:"100%",alignItems:"center",gap:5}}>
-                <View style={{ minHeight: hp("15%"), width: "90%", gap: 5 }}>
-                  {/* post creater info */}
-                  <View style={{ minHeight: hp("6%"), width: "100%", flexDirection: "row", gap: 10, alignItems: "center", }}>
-                    <Image style={{ height: 45, width: 45, borderRadius: 100, backgroundColor: "lightgrey",borderWidth:1.3,borderColor:"rgba(255,255,255,0.4)" }} source={blog.isAnonymous ? require("../assets/anonymous.jpg") : { uri: `${serverUrl}/images/${blog.userImageName}` }} />
-                    <Text style={{ color: 'white', fontSize: 16, fontWeight: "600" }}>{blog.isAnonymous ? "Anonymous" : blog.name}</Text>
-                  </View>
-                  {/* end of post creater info */}
-                  {/* Title */}
-                  <Text numberOfLines={2} ellipsizeMode='tail' style={{ color: "white", fontSize: 22, fontWeight: "600" }}>{blog.title}</Text>
-                  {/* end of title */}
-                  {/* Description */}
-                  <Text numberOfLines={2} ellipsizeMode='tail' style={{ color: "rgba(255,255,255,0.75)", fontSize: 17, fontWeight: "400",marginVertical:5 }}>{blog.description}</Text>
-                  {/* end of description */}
-                  {/* ImagePost */}
-                  {blog.imageSent && (
-                    <Image style={{ height: 150, width: "100%", borderRadius: 10, backgroundColor: "rgba(255,255,255,0.1)", overflow: "hidden"}} source={{ uri: `${serverUrl}/blogImage/${blog.image.name}` }} />
-                  )}
-                  {/* end of ImagePost */}
-                </View>
-                {/* end of post */}
-                <View style={{height:1.3,width:"100%",backgroundColor:'rgba(255,255,255,0.15)',marginVertical:10}}></View>
-              </View>
-            )
-          })
-        }
-      </ScrollView>
+      />
       <Animated.View
         style={{
           position: 'absolute',
@@ -138,12 +148,10 @@ const Home = () => {
           style={{
             height: hp("6.2%"),
             width: wp("30%"),
-            backgroundColor: 'rgba(241,185,224,1)',
+            backgroundColor: 'pink',
             justifyContent: "center",
             alignItems: "center",
             borderRadius: 50,
-            alignItems: 'center',
-            justifyContent: 'center'
           }}
           onPress={() => { navigation.navigate("Post") }}
         >

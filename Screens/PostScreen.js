@@ -10,7 +10,7 @@ import { userType } from '../UserContext';
 const PostScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
-    const { id, name, userImageName, title, description, isAnonymous, imageSent, imageName, userHasLiked } = route.params;
+    const { id, name, userImageName, title, description, isAnonymous, imageSent, imageName, userHasLiked,viaComment } = route.params;
     const { userName } = useContext(userType);
     const [commentsArr, setCommentsArr] = useState([]);
     const [commentInp, setCommentInp] = useState('');
@@ -57,6 +57,9 @@ const PostScreen = () => {
     }, []);
 
     useEffect(() => {
+        if(viaComment){
+            scrollRef.current.scrollToEnd();
+        }
         if (userLiked === null) {
             console.log("changed the state");
             setUserLiked(userHasLiked);

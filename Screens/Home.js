@@ -111,10 +111,10 @@ const Home = () => {
           onPress={() => { navigation.navigate("PostScreen", { id: item._id, title: item.title, description: item.description, name: item.name, userImageName: item.userImageName,isAnonymous:item.isAnonymous,imageSent:item.imageSent,imageName:item.imageSent?item.image.name:null }) }}
           activeOpacity={0.83} style={{ minHeight: hp("15%"), width: "90%", marginBottom: 10 }}>
           {/* Post creator info */}
-          <View style={{ minHeight: hp("6%"), flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-            <View style={{ height: 52, width: 52, alignItems: "center", justifyContent: "center", borderRadius: 100, backgroundColor: "transparent", borderWidth: 1.8, borderColor: "pink" }}>
+          <View style={{ minHeight: hp("5%"), flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
+            <View style={{ height: 48, width: 48, alignItems: "center", justifyContent: "center", borderRadius: 100, backgroundColor: "transparent", borderWidth: 1.8, borderColor: "pink" }}>
               <Image
-                style={{ height: 45, width: 45, borderRadius: 100, backgroundColor: "lightgrey" }}
+                style={{ height: 40, width: 40, borderRadius: 100, backgroundColor: "lightgrey" }}
                 source={item.isAnonymous ? require("../assets/anonymous.jpg") : { uri: `${serverUrl}/images/${item.userImageName}` }}
               />
             </View>

@@ -5,8 +5,8 @@ const blogSchema = new mongoose.Schema({
         require: true
     },
     userImageName: {
-        type:String,
-        require:true
+        type: String,
+        require: true
     },
     title: {
         type: String,
@@ -15,9 +15,9 @@ const blogSchema = new mongoose.Schema({
     description: {
         type: String,
     },
-    imageSent:{
-        type:Boolean,
-        require:true
+    imageSent: {
+        type: Boolean,
+        require: true
     },
     image: {
         name: { type: String, },
@@ -34,9 +34,20 @@ const blogSchema = new mongoose.Schema({
                 type: String,
                 required: true
             },
+            imageUser: {
+                type: String,
+                require: true
+            },
             comment: {
                 type: String,
                 required: true
+            }
+        }
+    ],
+    likes: [
+        {
+            likedUser: {
+                type:String
             }
         }
     ]

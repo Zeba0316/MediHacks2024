@@ -174,7 +174,7 @@ app.get("/getUserData/:userId", async (req, res) => {
     }
 })
 
-// fetch images:
+// fetch user image:
 app.get('/images/:name', async (req, res) => {
     const { name } = req.params;
     try {
@@ -187,6 +187,25 @@ app.get('/images/:name', async (req, res) => {
         // Set content type and send image data
         res.set('Content-Type', user.image.contentType);
         res.send(user.image.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Failed to fetch image.' });
+    }
+});
+
+// fetch blogPost image:
+app.get('/blogImage/:name', async (req, res) => {
+    const { name } = req.params;
+    try {
+        // Find user with matching image name
+        const blog = await Blog.findOne({ 'image.name': name });
+        if (!blog || !blog.image) {
+            return res.status(404).json({ success: false, message: 'Image not found.' });
+        }
+
+        // Set content type and send image data
+        res.set('Content-Type', blog.image.contentType);
+        res.send(blog.image.data);
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Failed to fetch image.' });

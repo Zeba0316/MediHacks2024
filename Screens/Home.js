@@ -95,17 +95,31 @@ const Home = () => {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={{ color: "white", fontSize: 20 }}>Home</Text>
         {
           blogsArr.map((blog, index) => {
             return (
-              <View key={index} style={{ minHeight: hp("20%"), width: "90%", backgroundColor: "grey" }}>
-                {/* post creater info */}
-                <View style={{ height: hp("7%"), width: "100%", flexDirection: "row", gap: 10, alignItems: "center" }}>
-                  <Image style={{ height: 50, width: 50, borderRadius: 100, backgroundColor: "lightgrey" }} source={blog.isAnonymous?require("../assets/anonymous.jpg"):{uri:`${serverUrl}/images/${blog.userImageName}`}} />
-                  <Text style={{ color: 'white', fontSize: 16, fontWeight: "500" }}>{blog.name}</Text>
+              <View key={index} style={{width:"100%",alignItems:"center",gap:5}}>
+                <View style={{ minHeight: hp("15%"), width: "90%", gap: 5 }}>
+                  {/* post creater info */}
+                  <View style={{ minHeight: hp("6%"), width: "100%", flexDirection: "row", gap: 10, alignItems: "center", }}>
+                    <Image style={{ height: 45, width: 45, borderRadius: 100, backgroundColor: "lightgrey",borderWidth:1.3,borderColor:"rgba(255,255,255,0.4)" }} source={blog.isAnonymous ? require("../assets/anonymous.jpg") : { uri: `${serverUrl}/images/${blog.userImageName}` }} />
+                    <Text style={{ color: 'white', fontSize: 16, fontWeight: "600" }}>{blog.isAnonymous ? "Anonymous" : blog.name}</Text>
+                  </View>
+                  {/* end of post creater info */}
+                  {/* Title */}
+                  <Text numberOfLines={2} ellipsizeMode='tail' style={{ color: "white", fontSize: 22, fontWeight: "600" }}>{blog.title}</Text>
+                  {/* end of title */}
+                  {/* Description */}
+                  <Text numberOfLines={2} ellipsizeMode='tail' style={{ color: "rgba(255,255,255,0.75)", fontSize: 17, fontWeight: "400",marginVertical:5 }}>{blog.description}</Text>
+                  {/* end of description */}
+                  {/* ImagePost */}
+                  {blog.imageSent && (
+                    <Image style={{ height: 150, width: "100%", borderRadius: 10, backgroundColor: "rgba(255,255,255,0.1)", overflow: "hidden"}} source={{ uri: `${serverUrl}/blogImage/${blog.image.name}` }} />
+                  )}
+                  {/* end of ImagePost */}
                 </View>
-                {/* end of post creater info */}
+                {/* end of post */}
+                <View style={{height:1.3,width:"100%",backgroundColor:'rgba(255,255,255,0.15)',marginVertical:10}}></View>
               </View>
             )
           })

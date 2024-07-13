@@ -108,7 +108,7 @@ const Home = () => {
     return (
       <View style={{ width: "100%", alignItems: "center", marginBottom: 10 }}>
         <TouchableOpacity
-          onPress={() => { navigation.navigate("PostScreen", { id: item._id, title: item.title, description: item.description, name: item.name, userImageName: item.userImageName,isAnonymous:item.isAnonymous,imageSent:item.imageSent,imageName:item.image.name }) }}
+          onPress={() => { navigation.navigate("PostScreen", { id: item._id, title: item.title, description: item.description, name: item.name, userImageName: item.userImageName,isAnonymous:item.isAnonymous,imageSent:item.imageSent,imageName:item.imageSent?item.image.name:null }) }}
           activeOpacity={0.83} style={{ minHeight: hp("15%"), width: "90%", marginBottom: 10 }}>
           {/* Post creator info */}
           <View style={{ minHeight: hp("6%"), flexDirection: "row", alignItems: "center", marginBottom: 10 }}>

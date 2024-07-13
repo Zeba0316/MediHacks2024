@@ -296,3 +296,38 @@ app.post("/liked/:id", async (req, res) => {
         return res.status(500).json({ message: "Error in changing the like of post" });
     }
 })
+
+// api endpoint to post comment:
+app.post("/comment/:id", async (req, res) => {
+    const id = req.params.id;
+    const { name, userImageName, commentInp } = req.body;
+    try {
+        await Blog.findByIdAndUpdate(id, {
+            $addToSet: {
+                comments: {
+                    user: name,
+                    imageUser: userImageName,
+                    comment: commentInp
+                }
+            }
+        });
+        return res.status(200).json({ message: "Successfully uploaded the comment!" });
+    }
+    catch (err) {
+        console.log("Error in posting comment: ", err);
+        return res.status(500).json({ message: "Error in posting comment" })
+    }
+})
+
+// api endpoint for fetching the comments of a post:
+app.get("/fetchComments/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+        const comments = await Blog.findById(id).select("comments");
+        return res.status(200).json({ commentsArr: comments });
+    }
+    catch (err) {
+        console.log("Error in fetching the comments: ", err);
+        return res.status(500).json({ message: "Error in fetching the comments" });
+    }
+})

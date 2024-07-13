@@ -53,7 +53,7 @@ const Login = () => {
                 if (res.data.sentVerificationImage) {
                     console.log(res.data.sentVerificationImage);
                     if (res.data.profileBuilt) {
-                        navigation.navigate("Home");
+                        navigation.navigate("MainTabs");
                     }
                     else{
                         navigation.navigate("ProfileBuild");

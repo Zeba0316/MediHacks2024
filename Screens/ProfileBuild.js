@@ -49,7 +49,7 @@ const ProfileBuild = () => {
         const res = await axios.post(`${serverUrl}/profileData/${userId}`, { emergencyPhone1, emergencyPhone2, pregnancyStatus, birthPlan, numBabies, dueDate, profileBuilt: true });
         if (res.status === 200) {
           console.log("Details Successfully Sent!");
-          navigation.navigate("Home");
+          navigation.navigate("MainTabs");
         }
       }
       catch (err) {

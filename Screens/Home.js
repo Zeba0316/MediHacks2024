@@ -108,7 +108,7 @@ const Home = () => {
     return (
       <View style={{ width: "100%", alignItems: "center", marginBottom: 10 }}>
         <TouchableOpacity
-          onPress={() => { navigation.navigate("PostScreen", { id: item._id, title: item.title, description: item.description, name: item.name, userImageName: item.userImageName, isAnonymous: item.isAnonymous, userHasLiked, imageSent: item.imageSent, imageName: item.imageSent ? item.image.name : null,viaComment:false }) }}
+          onPress={() => { navigation.navigate("PostScreen", { id: item._id, title: item.title, description: item.description, name: item.name, userImageName: item.userImageName, isAnonymous: item.isAnonymous, userHasLiked, imageSent: item.imageSent, imageName: item.imageSent ? item.image.name : null, viaComment: false }) }}
           activeOpacity={0.83} style={{ minHeight: hp("15%"), width: "90%", marginBottom: 10 }}>
           {/* Post creator info */}
           <View style={{ minHeight: hp("5%"), flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
@@ -161,7 +161,7 @@ const Home = () => {
           {/* Comment Area */}
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("PostScreen", { id: item._id, title: item.title, description: item.description, name: item.name, userImageName: item.userImageName, isAnonymous: item.isAnonymous, userHasLiked, imageSent: item.imageSent, imageName: item.imageSent ? item.image.name : null,viaComment:true })
+              navigation.navigate("PostScreen", { id: item._id, title: item.title, description: item.description, name: item.name, userImageName: item.userImageName, isAnonymous: item.isAnonymous, userHasLiked, imageSent: item.imageSent, imageName: item.imageSent ? item.image.name : null, viaComment: true })
             }}
             activeOpacity={0.75} style={{ height: 35, width: "65%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", borderWidth: 1.5, borderRadius: 50, borderColor: "rgba(255,255,255,0.15)", paddingHorizontal: 3 }}>
             <Image style={{ height: 26, width: 26, borderRadius: 100, borderWidth: 1, borderColor: "grey" }} source={{ uri: `${serverUrl}/images/${item.userImageName}` }} />
@@ -179,6 +179,9 @@ const Home = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "rgba(29,20,21,1)" }}>
+      <View style={{ minHeight: hp("5.1%"), width: "100%", alignItems: "center", justifyContent: "flex-start" }}>
+        <Text style={{color:"rgba(255,255,255,0.9)",fontSize:hp("3.2%"),fontWeight:"500"}}>Explore</Text>
+      </View>
       <FlatList
         data={blogsArr}
         renderItem={renderBlogItem}

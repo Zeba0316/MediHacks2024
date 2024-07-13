@@ -82,7 +82,7 @@ const WelcomeScreen = () => {
             console.log('val:', sent);
             if (sent) {
                 if (profile) {
-                    navigation.navigate("Home");
+                    navigation.navigate("MainTabs");
                 }
                 else {
                     navigation.navigate("ProfileBuild");

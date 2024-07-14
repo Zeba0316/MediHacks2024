@@ -18,6 +18,7 @@ import UserProfile from '../Screens/UserProfile'
 import Emergency from '../Screens/Emergency'
 import Friends from '../Screens/Friends'
 import FriendReq from '../Screens/FriendReq'
+import Message from '../Screens/Message'
 // importing Icons:
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -66,6 +67,7 @@ const Navigation = () => {
           <Stack.Screen name="UserProfile" component={UserProfile} />
           <Stack.Screen options={{ headerStyle: { backgroundColor: "rgba(40,40,40,0.98)" } }} name="Friends" component={Friends} />
           <Stack.Screen options={{ headerStyle: { backgroundColor: "rgba(40,40,40,0.98)" } }} name="FriendReq" component={FriendReq} />
+          <Stack.Screen name="Messages" component={Message} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

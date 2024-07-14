@@ -60,7 +60,7 @@ const PostScreen = () => {
         console.log(userImage.name);
         if (viaComment) {
             scrollRef.current.scrollToEnd();
-            
+
         }
         if (userLiked === null) {
             console.log("changed the state");

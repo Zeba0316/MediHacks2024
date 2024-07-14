@@ -7,7 +7,7 @@ const UserSection = ({ friend }) => {
     const navigation = useNavigation();
     return (
         <Pressable
-            onPress={() => { navigation.navigate("Messages", { friendId: friend._id }) }}
+            onPress={() => { navigation.navigate("Messages", { friendId: friend._id,friendName:friend.name,friendImage:friend.image.name }) }}
             style={{
                 flexDirection: "row",
                 alignItems: "center",

@@ -82,24 +82,33 @@ const UserProfile = () => {
             }}>
               <LinearGradient
                 style={{ width: "100%", height: "100%" }}
-                colors={["rgba(29,20,21,1)", "rgba(29,20,21,1)", "rgba(29,20,21,1)", "rgba(255, 162, 203, 0.98)", "rgba(255, 162, 203, 0.98)", "rgba(29,20,21,1)", "rgba(29,20,21,1)", "rgba(29,20,21,1)"]}
+                colors={["rgba(29,20,21,1)", "rgba(29,20,21,1)", "rgba(29,20,21,1)", "rgba(255, 162, 203, 0.8)", "rgba(255, 162, 203, 0.8)", "rgba(29,20,21,1)", "rgba(29,20,21,1)", "rgba(29,20,21,1)"]}
               />
             </Animated.View>
-            <Image style={{ height: "100%", width: "100%", borderWidth:5,borderColor:"rgba(29,20,21,1)",borderRadius: 8, resizeMode: "cover" }} source={{ uri: `${serverUrl}/images/${userImage}` }} />
+            <Image style={{ height: "100%", width: "100%", borderWidth: 5, borderColor: "rgba(29,20,21,1)", borderRadius: 8, resizeMode: "cover" }} source={{ uri: `${serverUrl}/images/${userImage}` }} />
           </View>
           <View style={{ flexDirection: 'row', gap: 10 }}>
-            <Text style={{ color: "white", marginTop: 5, fontSize: 24, fontWeight: "500" }}>Status:</Text>
-            <Text style={{ color: "pink", marginTop: 5, fontSize: 24, fontWeight: "500" }}>{userData.pregnancyStatus}</Text>
+            <Text style={{ color: "white", marginTop: 5, fontSize: 25, fontWeight: "500" }}>Status:</Text>
+            <Text style={{ color: "pink", marginTop: 5, fontSize: 25, fontWeight: "500" }}>{userData.pregnancyStatus}</Text>
           </View>
-          {userData.pregnancyStatus != "MotherHood" &&
+          {userData.pregnancyStatus == "MotherHood" &&
             <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
-              <Text style={{ color: "white", fontSize: 18 }}>Number of Babies: {userData.numBabies}</Text>
-              <Text style={{ color: "white", fontSize: 18 }}>Due Date: {userData.dueDate}</Text>
-              <Text style={{ color: "white", fontSize: 18 }}>Birth Plan: {userData.birthPlan}</Text>
+              <View style={{ flexDirection: "row", gap: 10 }}>
+                <Text style={{ color: "white", fontSize: 19, fontWeight: "500" }}>Due Date:</Text>
+                <Text style={{ color: "pink", fontSize: 19, fontWeight: "500" }}>{userData.dueDate}</Text>
+              </View>
+              <View style={{ flexDirection: "row", gap: 10 }}>
+                <Text style={{ color: "white", fontSize: 19, fontWeight: "500" }}>Number of Babies:</Text>
+                <Text style={{ color: "pink", fontSize: 19, fontWeight: "500" }}>{userData.numBabies}</Text>
+              </View>
+              <View style={{ flexDirection: "row", gap: 10 }}>
+                <Text style={{ color: "white", fontSize: 19, fontWeight: "500" }}>Birth Plan:</Text>
+                <Text style={{ color: "pink", fontSize: 19, fontWeight: "500" }}>{userData.birthPlan}</Text>
+              </View>
             </View>}
           <View style={{ flexDirection: "row", gap: 10 }}>
-            <Text style={{ color: 'white', fontSize: 18, fontWeight: "500" }}>Verification:</Text>
-            <Text style={{ color: userData.verified ? 'lightgreen' : "red", fontSize: 18, fontWeight: "500" }}>{userData.verified ? "Verified" : "Not Verified"}</Text>
+            <Text style={{ color: 'white', fontSize: 22, fontWeight: "500" }}>Verification:</Text>
+            <Text style={{ color: userData.verified ? 'lightgreen' : "red", fontSize: 22, fontWeight: "500" }}>{userData.verified ? "Verified" : "Not Verified"}</Text>
           </View>
         </View>
       ) : (

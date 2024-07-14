@@ -82,6 +82,9 @@ const createToken = (userId) => {
 }
 
 //Api:
+app.get("/",(req,res)=>{
+    res.send("Server is Running!")
+})
 
 // endpoint for Sign Up:
 app.post("/register", upload.single('image'), async (req, res) => {
@@ -218,10 +221,10 @@ app.get('/images/:name', async (req, res) => {
 
         // Set content type and send image data
         res.set('Content-Type', user.image.contentType);
-        res.send(user.image.data);
+        return res.send(user.image.data);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Failed to fetch image.' });
+        return res.status(500).json({ success: false, message: 'Failed to fetch image.' });
     }
 });
 
@@ -236,11 +239,11 @@ app.get('/blogImage/:name', async (req, res) => {
         }
 
         // Set content type and send image data
-        res.set('Content-Type', blog.image.contentType);
-        res.send(blog.image.data);
+         res.set('Content-Type', blog.image.contentType);
+        return res.send(blog.image.data);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Failed to fetch image.' });
+        return res.status(500).json({ success: false, message: 'Failed to fetch image.' });
     }
 });
 
@@ -376,7 +379,7 @@ app.get("/users/:userId", async (req, res) => {
             .skip(skip)
             .limit(limit);
         const totalUsers = await User.countDocuments({ _id: { $ne: loggedInUserId } });
-        res.status(200).json({
+        return res.status(200).json({
             users,
             totalUsers,
             totalPages: Math.ceil(totalUsers / limit),
@@ -384,7 +387,7 @@ app.get("/users/:userId", async (req, res) => {
         });
     } catch (err) {
         console.log("Error retrieving users", err);
-        res.status(500).json({ message: "Error retrieving users" });
+        return res.status(500).json({ message: "Error retrieving users" });
     }
 });
 
@@ -436,9 +439,9 @@ app.get('/friends/:userId', async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
         console.log("User Friends: ", user.friends);
-        res.status(200).json(user.friends);
+       return res.status(200).json(user.friends);
     } catch (err) {
-        res.status(500).json({ error: 'Error fetching friends', details: err });
+        return res.status(500).json({ error: 'Error fetching friends', details: err });
     }
 });
 
@@ -449,9 +452,9 @@ app.get('/friend-requests/sent/:userId', async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-        res.status(200).json(user.sentFriendRequest);
+        return res.status(200).json(user.sentFriendRequest);
     } catch (err) {
-        res.status(500).json({ error: 'Error fetching sent friend requests', details: err });
+        return  res.status(500).json({ error: 'Error fetching sent friend requests', details: err });
     }
 });
 
@@ -481,9 +484,9 @@ app.post('/friend-request', async (req, res) => {
         await currentUser.save();
         await selectedUser.save();
 
-        res.status(200).json({ message: 'Friend request sent successfully' });
+       return res.status(200).json({ message: 'Friend request sent successfully' });
     } catch (err) {
-        res.status(500).json({ error: 'Error sending friend request', details: err });
+        return res.status(500).json({ error: 'Error sending friend request', details: err });
     }
 });
 
@@ -521,10 +524,11 @@ app.post("/friend-request/accept", async (req, res) => {
         await User.findByIdAndUpdate(receiverId, {
             $pull: { sentFriendRequest: senderId },
         })
-        res.status(200).json({ message: " Friend Request accepted successfully ! " })
+       return res.status(200).json({ message: " Friend Request accepted successfully ! " })
     }
     catch (err) {
         console.log("error in accepting the frined request : ", err);
+        return res.status(500).json({ message: "internal server error " })
     }
 })
 
@@ -538,11 +542,11 @@ app.get("/messages/:userId/:friendId", async (req, res) => {
                 { senderId: friendId, receiverId: userId }
             ]
         }).populate("senderId", "_id name");
-        res.status(200).json(messages);
+        return res.status(200).json(messages);
 
     }
     catch (err) {
         console.log("Error fetching the messages : ", err);
-        res.status(500).json({ message: "internal error occurred" });
+        return res.status(500).json({ message: "internal error occurred" });
     }
 })

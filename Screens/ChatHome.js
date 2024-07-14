@@ -1,16 +1,32 @@
 import { View, Text, Alert, FlatList } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import axios from 'axios';
 import { userType } from "../UserContext";
 import UserBlock from '../Components/UserBlock';
+import { useNavigation } from '@react-navigation/native';
 
 const ChatHome = () => {
   const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
+  const navigation = useNavigation();
   const { userId } = useContext(userType);
   const [userArr, setUserArr] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "",
+      headerStyle: {
+        backgroundColor: "rgba(40,40,40,0.98)",
+    },
+      headerLeft: () => {
+        return (
+          <></>
+        )
+      }
+    })
+  }, [])
 
   useEffect(() => {
     fetchUsers(page, 10);
@@ -47,7 +63,7 @@ const ChatHome = () => {
         keyExtractor={(user) => user._id}
         renderItem={({ item }) => (
           <View style={{ width: "92%", alignSelf: "center" }}>
-            <UserBlock id={item._id} name={item.name} email={item.email} userImage={item.image.name} />
+            <UserBlock user={item} id={item._id} name={item.name} email={item.email} userImage={item.image.name} />
           </View>
         )}
         onEndReached={loadMoreUsers}

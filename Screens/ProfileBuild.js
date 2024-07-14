@@ -40,7 +40,7 @@ const ProfileBuild = () => {
       console.log({
         pregnancyStatus,
         dueDate,
-        numBabies: selectedNumBabiesOption?.label || numBabies,
+        numBabies: numBabies,
         birthPlan,
         emergencyPhone1,
         emergencyPhone2,

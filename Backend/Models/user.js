@@ -53,7 +53,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
     },
     numBabies: {
-        type: Number,
+        type: String,
     },
     birthPlan: {
         type: String,

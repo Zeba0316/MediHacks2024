@@ -394,3 +394,62 @@ app.get("/getEmergency/:id", async () => {
         return res.status(500).json({ message: "Error in retrieving the Emergency contacts" });
     }
 })
+
+
+// Fetch User Friends API
+app.get('/friends/:userId', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId).populate('friends', 'name email');
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.status(200).json(user.friends);
+    } catch (err) {
+        res.status(500).json({ error: 'Error fetching friends', details: err });
+    }
+});
+
+// Fetch Sent Friend Requests API
+app.get('/friend-requests/sent/:userId', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId).populate('sentFriendRequest', 'name email');
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.status(200).json(user.sentFriendRequest);
+    } catch (err) {
+        res.status(500).json({ error: 'Error fetching sent friend requests', details: err });
+    }
+});
+
+// Send Friend Request API
+app.post('/friend-request', async (req, res) => {
+    const { currentUserId, selectedUserId } = req.body;
+    
+    try {
+        const currentUser = await User.findById(currentUserId);
+        const selectedUser = await User.findById(selectedUserId);
+        
+        if (!currentUser || !selectedUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (currentUser.friends.includes(selectedUserId)) {
+            return res.status(400).json({ error: 'User is already a friend' });
+        }
+
+        if (currentUser.sentFriendRequest.includes(selectedUserId)) {
+            return res.status(400).json({ error: 'Friend request already sent' });
+        }
+
+        currentUser.sentFriendRequest.push(selectedUserId);
+        selectedUser.friendRequest.push(currentUserId);
+
+        await currentUser.save();
+        await selectedUser.save();
+
+        res.status(200).json({ message: 'Friend request sent successfully' });
+    } catch (err) {
+        res.status(500).json({ error: 'Error sending friend request', details: err });
+    }
+});

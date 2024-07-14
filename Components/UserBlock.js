@@ -11,7 +11,7 @@ const UserBlock = ({ id, name, email, userImage }) => {
     const navigation = useNavigation();
     const isFocused = useIsFocused();
     const { userId } = useContext(userType);
-    const [userFriends, setUserFriends] = useState([]);
+    const [userFriends, setUserFriends] = useState(false);
     const [friendRequest, setFriendRequest] = useState([]);
     const [sentReq, setSentReq] = useState(false);
 
@@ -20,7 +20,8 @@ const UserBlock = ({ id, name, email, userImage }) => {
             try {
                 const response = await axios.get(`${serverUrl}/friends/${userId}`);
                 if (response.status === 200) {
-                    setUserFriends(response.data);
+                    const isIdPresent = await response.data.some(friend => friend._id === id)
+                    setUserFriends(isIdPresent);
                 } else {
                     console.log("Error fetching friends:", response.status);
                 }
@@ -33,7 +34,8 @@ const UserBlock = ({ id, name, email, userImage }) => {
             try {
                 const response = await axios.get(`${serverUrl}/friend-requests/sent/${userId}`);
                 if (response.status === 200) {
-                    setFriendRequest(response.data);
+                    const isIdpresent = await response.data.some(friend => friend._id === id)
+                    setFriendRequest(isIdpresent);
                 } else {
                     console.log("Error fetching friend requests:", response.status);
                 }
@@ -41,12 +43,14 @@ const UserBlock = ({ id, name, email, userImage }) => {
                 console.log("Error fetching friend requests:", err);
             }
         };
-
+            if(sentReq){
+            fetchFriendRequest();
+            }
         if (isFocused) {
             fetchUserFriends();
             fetchFriendRequest();
         }
-    }, [isFocused]);
+    }, [isFocused,sentReq]);
 
     const sendFriendRequest = async (currentUserId, selectedUserId) => {
         const payload = {
@@ -63,12 +67,6 @@ const UserBlock = ({ id, name, email, userImage }) => {
         }
     };
 
-    let friendStatus = 'none';
-    if (userFriends.includes(id)) {
-        friendStatus = 'friend';
-    } else if (sentReq || friendRequest.some((friend) => friend._id === id)) {
-        friendStatus = 'sent';
-    }
 
     return (
         <View style={{ minHeight: 60, width: "100%", flexDirection: 'row', justifyContent: "flex-end", alignItems: "center", paddingVertical: 7 }}>
@@ -86,12 +84,29 @@ const UserBlock = ({ id, name, email, userImage }) => {
             </TouchableOpacity>
             {/* end of name dp and email */}
             {/* Handshake for friend request */}
-            <TouchableOpacity
-                onPress={() => friendStatus === 'none' && sendFriendRequest(userId, id)}
-                style={{ justifyContent: "center", alignItems: "center", gap: 3, paddingHorizontal: 10 }}>
-                <FontAwesome5 name="hands-helping" size={35} color={friendStatus === 'friend' ? "pink" : friendStatus === 'sent' ? "gray" : "white"} />
-                <Text style={{ color: "lightgreen", fontSize: 15, fontWeight: "500" }}>{friendStatus === 'friend' ? "Friend" : friendStatus === 'sent' ? "Sent Request" : "Follow"}</Text>
-            </TouchableOpacity>
+            {userFriends ?
+                <TouchableOpacity
+                    onPress={() => Alert.alert("Already a friend")}
+                    style={{ justifyContent: "center", alignItems: "center", gap: 3, paddingHorizontal: 10 }}>
+                    <FontAwesome5 name="hands-helping" size={35} color={"pink"} />
+                    <Text style={{ color: "white", fontSize: 13 }}>Friend</Text>
+                </TouchableOpacity>
+                :
+                friendRequest ?
+                    <TouchableOpacity
+                        onPress={() =>Alert.alert("Already Sent Request")}
+                        style={{ justifyContent: "center", alignItems: "center", gap: 3, paddingHorizontal: 10 }}>
+                        <FontAwesome5 name="hands-helping" size={35} color={"rgba(255,255,255,0.5)"} />
+                        <Text style={{ color: "white", fontSize: 13 }}>sent</Text>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity
+                        onPress={() => sendFriendRequest(userId, id)}
+                        style={{ justifyContent: "center", alignItems: "center", gap: 3, paddingHorizontal: 10 }}>
+                        <FontAwesome5 name="hands-helping" size={35} color={"white"} />
+                        <Text style={{ color: "white", fontSize: 13 }}>shake</Text>
+                    </TouchableOpacity>
+            }
         </View>
     );
 }

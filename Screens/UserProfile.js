@@ -1,8 +1,10 @@
-import { View, Text, Image, TouchableOpacity, Alert } from 'react-native';
-import React, { useLayoutEffect, useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, Alert, Animated } from 'react-native';
+import React, { useLayoutEffect, useState, useEffect, useRef } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
+import { LinearGradient } from 'expo-linear-gradient';
+// importing icons:
+import { Ionicons } from '@expo/vector-icons';
 
 const UserProfile = () => {
   const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
@@ -10,6 +12,11 @@ const UserProfile = () => {
   const route = useRoute();
   const { id, name, email, userImage } = route.params;
   const [userData, setUserData] = useState(null);
+  const rotateValue = useRef(new Animated.Value(0)).current;
+  const rotateInterpolate = rotateValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -33,6 +40,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     fetchData();
+    startRotationAnimation();
   }, []);
 
   const fetchData = async () => {
@@ -47,6 +55,15 @@ const UserProfile = () => {
       Alert.alert("Failed to Fetch User Data", "Please try again later.");
     }
   };
+  const startRotationAnimation = () => {
+    Animated.loop(
+      Animated.timing(rotateValue, {
+        toValue: 1,
+        duration: 5500,
+        useNativeDriver: true,
+      })
+    ).start();
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "rgba(29,20,21,1)", alignItems: "center", justifyContent: "center", paddingVertical: 10 }}>
@@ -54,8 +71,21 @@ const UserProfile = () => {
         <View style={{ flex: 1, width: "90%", alignItems: "center", gap: 10 }}>
           <Text style={{ color: "pink", fontSize: 30, fontWeight: "600" }}>{name}</Text>
           <Text style={{ color: "white", fontSize: 18, marginTop: -8, fontWeight: "500" }}>{email}</Text>
-          <View style={{ height: 280, width: "100%", borderRadius: 10, borderWidth: 1.5, borderColor: "pink", padding: 5, overflow: "hidden" }}>
-            <Image style={{ height: "100%", width: "100%", borderRadius: 6, resizeMode: "cover" }} source={{ uri: `${serverUrl}/images/${userImage}` }} />
+          <View style={{ height: 280, width: "100%", justifyContent: "center", alignItems: "center", borderRadius: 10, borderWidth: 1, borderColor: "transparent", padding: 3.2, overflow: "hidden", position: 'relative' }}>
+            <Animated.View style={{
+              width: "200%",
+              height: "205%",
+              left: "-50%",
+              top: "-50%",
+              borderRadius: 10,
+              position: "absolute", transform: [{ rotate: rotateInterpolate }]
+            }}>
+              <LinearGradient
+                style={{ width: "100%", height: "100%" }}
+                colors={["rgba(29,20,21,1)", "rgba(29,20,21,1)", "rgba(29,20,21,1)", "rgba(255, 162, 203, 0.98)", "rgba(255, 162, 203, 0.98)", "rgba(29,20,21,1)", "rgba(29,20,21,1)", "rgba(29,20,21,1)"]}
+              />
+            </Animated.View>
+            <Image style={{ height: "100%", width: "100%", borderWidth:5,borderColor:"rgba(29,20,21,1)",borderRadius: 8, resizeMode: "cover" }} source={{ uri: `${serverUrl}/images/${userImage}` }} />
           </View>
           <View style={{ flexDirection: 'row', gap: 10 }}>
             <Text style={{ color: "white", marginTop: 5, fontSize: 24, fontWeight: "500" }}>Status:</Text>
@@ -74,8 +104,9 @@ const UserProfile = () => {
         </View>
       ) : (
         <Text style={{ color: "white", fontSize: 18 }}>Loading user data...</Text>
-      )}
-    </View>
+      )
+      }
+    </View >
   );
 };
 

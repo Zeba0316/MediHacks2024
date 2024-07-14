@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Image, Text, TouchableOpacity, Vibration } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -6,8 +6,35 @@ import {
 } from "react-native-responsive-screen";
 import { Alert } from "react-native";
 import * as SMS from 'expo-sms';
+import axios from "axios";
+import { userType } from "../UserContext";
 
 const Emergency = () => {
+  const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
+  const { userId } = useContext(userType);
+  const [emergencyContactsArr, setEmergencyConatctsArr] = useState(null);
+  const [reload, setReload] = useState(false);
+  useEffect(() => {
+    if (emergencyContactsArr == null) {
+      fetchEmergencyPhoneNumbers();
+    }
+    console.log("Emergency numbers:",emergencyContactsArr);
+  }, [reload]);
+
+  const fetchEmergencyPhoneNumbers = async () => {
+    try {
+      const res = await axios.get(`${serverUrl}/getEmergency/${userId}`);
+      if (res.status === 200) {
+        setEmergencyConatctsArr([res.data.emergencyContacts.emergencyPhone1,res.data.emergencyContacts.emergencyPhone2]);
+        setReload(!reload);
+      }
+    }
+    catch (err) {
+      console.log("Error in fetching the phone numbers: ", err);
+      Alert.alert("Failed to Retrieve Numbers", "Check connectivity!");
+    }
+  }
+
   const handlePress = () => {
     Vibration.vibrate(500);
 
@@ -30,7 +57,7 @@ const Emergency = () => {
     const isAvailable = await SMS.isAvailableAsync();
     if (isAvailable) {
       const { result } = await SMS.sendSMSAsync(
-        ["9717838988","8287770740"], 
+        emergencyContactsArr,
         "This is an emergency message from MomsConnect. Please respond immediately!"
       );
       console.log(result);

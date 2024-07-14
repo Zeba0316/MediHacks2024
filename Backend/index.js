@@ -379,7 +379,7 @@ app.get("/userProfileData/:userId", async (req, res) => {
 });
 
 // api endpoint for fetching emergency contact of the user:
-app.get("/getEmergency/:id", async () => {
+app.get("/getEmergency/:id", async (req,res) => {
     const id = req.params.id;
     try {
         const emergencyContacts = await User.findById(id, {

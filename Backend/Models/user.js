@@ -47,10 +47,10 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     emergencyPhone1: {
-        type: Number,
+        type: String,
     },
     emergencyPhone2: {
-        type: Number,
+        type: String,
     },
     numBabies: {
         type: String,

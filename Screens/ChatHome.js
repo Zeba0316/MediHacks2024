@@ -19,10 +19,12 @@ const ChatHome = () => {
       title: "",
       headerStyle: {
         backgroundColor: "rgba(40,40,40,0.98)",
-    },
+      },
       headerLeft: () => {
         return (
-          <></>
+          <View>
+
+          </View>
         )
       }
     })

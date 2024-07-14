@@ -46,7 +46,7 @@ const ProfileBuild = () => {
         emergencyPhone2,
       });
       try {
-        const res = await axios.post(`${serverUrl}/profileData/${userId}`, { emergencyPhone1, emergencyPhone2, pregnancyStatus, birthPlan, numBabies, dueDate, profileBuilt: true });
+        const res = await axios.post(`${serverUrl}/profileData/${userId}`, { emergencyPhone1: emergencyPhone1.toString(), emergencyPhone2: emergencyPhone2.toString(), pregnancyStatus, birthPlan, numBabies, dueDate, profileBuilt: true });
         if (res.status === 200) {
           console.log("Details Successfully Sent!");
           navigation.navigate("MainTabs");

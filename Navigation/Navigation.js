@@ -77,7 +77,7 @@ const Navigation = () => {
 const TabNavigation = () => {
   const Tab = createBottomTabNavigator();
   return (
-    <Tab.Navigator initialRouteName='ChatHome'
+    <Tab.Navigator initialRouteName='Home'
       screenOptions={{ tabBarShowLabel: false, tabBarStyle: { backgroundColor: "rgba(29,20,21,0.98)" } }}
     >
       <Tab.Screen options={{

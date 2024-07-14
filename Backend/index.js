@@ -334,24 +334,46 @@ app.get("/fetchComments/:id", async (req, res) => {
 
 // api endpoint to fetch all the users except the active user:
 app.get("/users/:userId", async (req, res) => {
-  const loggedInUserId = req.params.userId;
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
-  const skip = (page - 1) * limit;
+    const loggedInUserId = req.params.userId;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-  try {
-    const users = await User.find({ _id: { $ne: loggedInUserId } })
-                            .skip(skip)
-                            .limit(limit);
-    const totalUsers = await User.countDocuments({ _id: { $ne: loggedInUserId } });
-    res.status(200).json({
-      users,
-      totalUsers,
-      totalPages: Math.ceil(totalUsers / limit),
-      currentPage: page,
-    });
-  } catch (err) {
-    console.log("Error retrieving users", err);
-    res.status(500).json({ message: "Error retrieving users" });
-  }
+    try {
+        const users = await User.find({ _id: { $ne: loggedInUserId } })
+            .skip(skip)
+            .limit(limit);
+        const totalUsers = await User.countDocuments({ _id: { $ne: loggedInUserId } });
+        res.status(200).json({
+            users,
+            totalUsers,
+            totalPages: Math.ceil(totalUsers / limit),
+            currentPage: page,
+        });
+    } catch (err) {
+        console.log("Error retrieving users", err);
+        res.status(500).json({ message: "Error retrieving users" });
+    }
+});
+
+// api endpoint for fetching the profile data:
+// GET user data with specific fields by userId
+app.get("/userProfileData/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    console.log("entered");
+    try {
+        const user = await User.findById(userId, {
+            pregnancyStatus: 1,
+            numBabies: 1,
+            birthPlan: 1,
+            dueDate: 1,
+            verified: 1,
+            _id: 0
+        });
+        console.log(user);
+        return res.status(200).json({ user });
+    } catch (err) {
+        console.error("Error in getting user data:", err);
+        return res.status(500).json({ message: "Error in getting user data" });
+    }
 });

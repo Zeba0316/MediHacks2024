@@ -377,3 +377,20 @@ app.get("/userProfileData/:userId", async (req, res) => {
         return res.status(500).json({ message: "Error in getting user data" });
     }
 });
+
+// api endpoint for fetching emergency contact of the user:
+app.get("/getEmergency/:id", async () => {
+    const id = req.params.id;
+    try {
+        const emergencyContacts = await User.findById(id, {
+            _id: 0,
+            emergencyPhone1: 1,
+            emergencyPhone2: 1
+        });
+        return res.status(200).json({ emergencyContacts });
+    }
+    catch (err) {
+        console.log("Error in retrieving the Emergency contacts: ", err);
+        return res.status(500).json({ message: "Error in retrieving the Emergency contacts" });
+    }
+})

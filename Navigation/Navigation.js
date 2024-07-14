@@ -15,8 +15,9 @@ import Post from '../Screens/Post'
 import PostScreen from '../Screens/PostScreen'
 import ChatHome from '../Screens/ChatHome'
 import UserProfile from '../Screens/UserProfile'
+import Emergency from '../Screens/Emergency'
 // importing Icons:
-import { Entypo } from '@expo/vector-icons';
+import { Entypo ,MaterialCommunityIcons} from '@expo/vector-icons';
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
@@ -74,16 +75,6 @@ const TabNavigation = () => {
       screenOptions={{ tabBarShowLabel: false, tabBarStyle: { backgroundColor: "rgba(29,20,21,0.98)" } }}
     >
       <Tab.Screen options={{
-        headerShown: false, tabBarIcon: ({ focused }) => {
-          return (
-            <View style={{ justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
-              <Entypo name="home" size={focused ? 32 : 24} color={focused ? "pink" : "grey"} />
-              {focused ? null : <Text style={{ fontSize: 12, color: focused ? "pink" : "grey" }}>Home</Text>}
-            </View>
-          )
-        }
-      }} name="Home" component={Home} />
-      <Tab.Screen options={{
         headerShown: true, tabBarIcon: ({ focused }) => {
           return (
             <View style={{ justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
@@ -93,6 +84,29 @@ const TabNavigation = () => {
           )
         }
       }} name='ChatHome' component={ChatHome} />
+
+      <Tab.Screen options={{
+        headerShown: false, tabBarIcon: ({ focused }) => {
+          return (
+            <View style={{ justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
+              <Entypo name="home" size={focused ? 32 : 24} color={focused ? "pink" : "grey"} />
+              {focused ? null : <Text style={{ fontSize: 12, color: focused ? "pink" : "grey" }}>Home</Text>}
+            </View>
+          )
+        }
+      }} name="Home" component={Home} />
+
+      <Tab.Screen options={{
+        headerShown: false, tabBarIcon: ({ focused }) => {
+          return (
+            <View style={{ justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
+              <MaterialCommunityIcons name="alert-octagram" size={focused ? 32 : 24} color={focused ? "pink" : "grey"}  />
+              {focused ? null : <Text style={{ fontSize: 12, color: focused ? "pink" : "grey" }}>Alert</Text>}
+            </View>
+          )
+        }
+      }} name="Emergency" component={Emergency} />
+
     </Tab.Navigator>
   )
 }

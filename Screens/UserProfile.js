@@ -95,11 +95,7 @@ const UserProfile = () => {
             <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
               <View style={{ flexDirection: "row", gap: 10 }}>
                 <Text style={{ color: "white", fontSize: 19, fontWeight: "500" }}>Due Date:</Text>
-                <Text style={{ color: "pink", fontSize: 19, fontWeight: "500" }}>{userData.dueDate.substring(0,10)}</Text>
-              </View>
-              <View style={{ flexDirection: "row", gap: 10 }}>
-                <Text style={{ color: "white", fontSize: 19, fontWeight: "500" }}>Number of Babies:</Text>
-                <Text style={{ color: "pink", fontSize: 19, fontWeight: "500" }}>{userData.numBabies}</Text>
+                <Text style={{ color: "pink", fontSize: 19, fontWeight: "500" }}>{userData.dueDate.substring(0, 10)}</Text>
               </View>
               <View style={{ flexDirection: "row", gap: 10 }}>
                 <Text style={{ color: "white", fontSize: 19, fontWeight: "500" }}>Birth Plan:</Text>

@@ -13,6 +13,8 @@ import ProfileBuild from "../Screens/ProfileBuild";
 import Home from '../Screens/Home'
 import Post from '../Screens/Post'
 import PostScreen from '../Screens/PostScreen'
+import ChatHome from '../Screens/ChatHome'
+import UserProfile from '../Screens/UserProfile'
 // importing Icons:
 import { Entypo } from '@expo/vector-icons';
 
@@ -58,6 +60,7 @@ const Navigation = () => {
           }} />
           <Stack.Screen name="Post" component={Post} />
           <Stack.Screen name="PostScreen" component={PostScreen} />
+          <Stack.Screen name="UserProfile" component={UserProfile} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>
@@ -67,8 +70,8 @@ const Navigation = () => {
 const TabNavigation = () => {
   const Tab = createBottomTabNavigator();
   return (
-    <Tab.Navigator initialRouteName='Home'
-    screenOptions={{tabBarShowLabel:false,tabBarStyle:{backgroundColor:"rgba(29,20,21,1)"}}}
+    <Tab.Navigator initialRouteName='ChatHome'
+      screenOptions={{ tabBarShowLabel: false, tabBarStyle: { backgroundColor: "rgba(29,20,21,0.98)" } }}
     >
       <Tab.Screen options={{
         headerShown: false, tabBarIcon: ({ focused }) => {
@@ -80,6 +83,16 @@ const TabNavigation = () => {
           )
         }
       }} name="Home" component={Home} />
+      <Tab.Screen options={{
+        headerShown: true, tabBarIcon: ({ focused }) => {
+          return (
+            <View style={{ justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
+              <Entypo name="chat" size={focused ? 32 : 24} color={focused ? "pink" : "grey"} />
+              {focused ? null : <Text style={{ fontSize: 12, color: focused ? "pink" : "grey" }}>Chat</Text>}
+            </View>
+          )
+        }
+      }} name='ChatHome' component={ChatHome} />
     </Tab.Navigator>
   )
 }

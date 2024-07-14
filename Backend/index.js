@@ -331,3 +331,27 @@ app.get("/fetchComments/:id", async (req, res) => {
         return res.status(500).json({ message: "Error in fetching the comments" });
     }
 })
+
+// api endpoint to fetch all the users except the active user:
+app.get("/users/:userId", async (req, res) => {
+  const loggedInUserId = req.params.userId;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  try {
+    const users = await User.find({ _id: { $ne: loggedInUserId } })
+                            .skip(skip)
+                            .limit(limit);
+    const totalUsers = await User.countDocuments({ _id: { $ne: loggedInUserId } });
+    res.status(200).json({
+      users,
+      totalUsers,
+      totalPages: Math.ceil(totalUsers / limit),
+      currentPage: page,
+    });
+  } catch (err) {
+    console.log("Error retrieving users", err);
+    res.status(500).json({ message: "Error retrieving users" });
+  }
+});

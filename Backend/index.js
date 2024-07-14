@@ -1,6 +1,7 @@
 // importing all the packages:
 const express = require("express");
 const mongoose = require("mongoose");
+const socketIO = require("socket.io");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt = require('jsonwebtoken');
@@ -35,6 +36,37 @@ mongoose.connect(`mongodb+srv://raza:${passDb}@cluster0.euagu12.mongodb.net/`, {
 // Importing Models:
 const User = require("./Models/user");
 const Blog = require("./Models/Blog");
+const Message = require("./models/message");
+
+//socket.io server
+const io = socketIO(server);
+
+io.on('connection', (socket) => {
+    console.log(`User : ${socket.id} Connected `);
+
+    socket.on('sendmessage', (data) => {
+        console.log('Message : ', data.message, "send by : ", data.senderId, "To : ", data.friendId);
+        const payload = {
+            message: data.message,
+            sender: data.senderId,
+            receiver: data.friendId,
+            timeStamp: new Date(),
+        }
+        const newMessage = new Message({
+            senderId: payload.sender,
+            receiverId: payload.receiver,
+            message: payload.message,
+            timeStamp: new Date(),
+        })
+        newMessage.save();
+        socket.broadcast.emit('message', payload);
+    });
+
+
+    socket.on('disconnect', () => {
+        console.log(`user : ${socket.id} disconnected`);
+    })
+})
 
 // Multer Setup 
 const storage = multer.memoryStorage();
@@ -470,23 +502,6 @@ app.get("/friendsReqData/:userId", async (req, res) => {
     }
 })
 
-// api endpoints to fetch friend requests:
-// app.post("/friend-request", async (req, res) => {
-//     const { currentUserId, selectedUserId } = req.body;
-//     try {
-//         await User.findByIdAndUpdate(selectedUserId, {
-//             $addToSet: { friendRequest: currentUserId }
-//         })
-//         await User.findByIdAndUpdate(currentUserId, {
-//             $addToSet: { sentFriendRequest: selectedUserId }
-//         })
-
-//         res.status(200).json({ message: "successfully sent request" });
-//     }
-//     catch (err) {
-//         res.status(500).json({ message: "internal error" });
-//     }
-// })
 
 // api endpoint to accept friend requests:
 app.post("/friend-request/accept", async (req, res) => {
@@ -510,5 +525,24 @@ app.post("/friend-request/accept", async (req, res) => {
     }
     catch (err) {
         console.log("error in accepting the frined request : ", err);
+    }
+})
+
+// api endpoint for messages:
+app.get("/messages/:userId/:friendId", async (req, res) => {
+    try {
+        const { userId, friendId } = req.params;
+        const messages = await Message.find({
+            $or: [
+                { senderId: userId, receiverId: friendId },
+                { senderId: friendId, receiverId: userId }
+            ]
+        }).populate("senderId", "_id name");
+        res.status(200).json(messages);
+
+    }
+    catch (err) {
+        console.log("Error fetching the messages : ", err);
+        res.status(500).json({ message: "internal error occurred" });
     }
 })

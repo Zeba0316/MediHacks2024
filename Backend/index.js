@@ -379,7 +379,7 @@ app.get("/userProfileData/:userId", async (req, res) => {
 });
 
 // api endpoint for fetching emergency contact of the user:
-app.get("/getEmergency/:id", async (req,res) => {
+app.get("/getEmergency/:id", async (req, res) => {
     const id = req.params.id;
     try {
         const emergencyContacts = await User.findById(id, {
@@ -399,10 +399,11 @@ app.get("/getEmergency/:id", async (req,res) => {
 // Fetch User Friends API
 app.get('/friends/:userId', async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId).populate('friends', 'name email');
+        const user = await User.findById(req.params.userId).populate('friends', 'name email image.name');
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
+        console.log("User Friends: ", user.friends);
         res.status(200).json(user.friends);
     } catch (err) {
         res.status(500).json({ error: 'Error fetching friends', details: err });
@@ -425,11 +426,11 @@ app.get('/friend-requests/sent/:userId', async (req, res) => {
 // Send Friend Request API
 app.post('/friend-request', async (req, res) => {
     const { currentUserId, selectedUserId } = req.body;
-    
+
     try {
         const currentUser = await User.findById(currentUserId);
         const selectedUser = await User.findById(selectedUserId);
-        
+
         if (!currentUser || !selectedUser) {
             return res.status(404).json({ error: 'User not found' });
         }
@@ -453,3 +454,61 @@ app.post('/friend-request', async (req, res) => {
         res.status(500).json({ error: 'Error sending friend request', details: err });
     }
 });
+
+// api endpoint to fetch friends name email image:
+app.get("/friendsReqData/:userId", async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId).populate("friendRequest", "name email image.name").lean();
+        const friends = user.friendRequest;
+        console.log("req", friends);
+        return res.status(200).json(friends);
+    }
+    catch (err) {
+        console.log("Error retrieving the FriendsList", err);
+        return res.status(500).json({ message: "internal server error" });
+    }
+})
+
+// api endpoints to fetch friend requests:
+// app.post("/friend-request", async (req, res) => {
+//     const { currentUserId, selectedUserId } = req.body;
+//     try {
+//         await User.findByIdAndUpdate(selectedUserId, {
+//             $addToSet: { friendRequest: currentUserId }
+//         })
+//         await User.findByIdAndUpdate(currentUserId, {
+//             $addToSet: { sentFriendRequest: selectedUserId }
+//         })
+
+//         res.status(200).json({ message: "successfully sent request" });
+//     }
+//     catch (err) {
+//         res.status(500).json({ message: "internal error" });
+//     }
+// })
+
+// api endpoint to accept friend requests:
+app.post("/friend-request/accept", async (req, res) => {
+    try {
+        const { senderId, receiverId } = req.body;
+        await User.findByIdAndUpdate(senderId, {
+            $addToSet: { friends: receiverId },
+            $pull: { sentFriendRequest: receiverId },
+        })
+        await User.findByIdAndUpdate(senderId, {
+            $pull: { friendRequest: receiverId },
+        })
+        await User.findByIdAndUpdate(receiverId, {
+            $addToSet: { friends: senderId },
+            $pull: { friendRequest: senderId },
+        })
+        await User.findByIdAndUpdate(receiverId, {
+            $pull: { sentFriendRequest: senderId },
+        })
+        res.status(200).json({ message: " Friend Request accepted successfully ! " })
+    }
+    catch (err) {
+        console.log("error in accepting the frined request : ", err);
+    }
+})

@@ -1,9 +1,12 @@
-import { View, Text, Alert, FlatList } from 'react-native';
+import { View, Text, Alert, FlatList, TouchableOpacity } from 'react-native';
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import axios from 'axios';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { userType } from "../UserContext";
 import UserBlock from '../Components/UserBlock';
 import { useNavigation } from '@react-navigation/native';
+// importing icons:
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 const ChatHome = () => {
   const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
@@ -22,8 +25,20 @@ const ChatHome = () => {
       },
       headerLeft: () => {
         return (
-          <View>
-
+          <View style={{ height: "100%", width: wp("100%"), flexDirection: 'row', justifyContent: "space-around", alignItems: "center", paddingHorizontal: 15 }}>
+            <TouchableOpacity
+              style={{ justifyContent: "center", alignItems: "center" }}
+              onPress={() => { navigation.navigate("FriendReq") }}>
+              <Ionicons name="people-sharp" size={30} color="pink" />
+              <Text style={{ color: 'white', fontSize: 12 }}>Requests</Text>
+            </TouchableOpacity>
+            <Text style={{ color: "pink", fontSize: 25, fontWeight: "500" }}>Chat Room</Text>
+            <TouchableOpacity
+              style={{ justifyContent: "center", alignItems: "center" }}
+              onPress={() => { navigation.navigate("Friends") }}>
+              <MaterialIcons name="chat-bubble" size={30} color="pink" />
+              <Text style={{ color: 'white', fontSize: 12 }}>Chat</Text>
+            </TouchableOpacity>
           </View>
         )
       }

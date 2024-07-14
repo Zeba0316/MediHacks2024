@@ -16,8 +16,10 @@ import PostScreen from '../Screens/PostScreen'
 import ChatHome from '../Screens/ChatHome'
 import UserProfile from '../Screens/UserProfile'
 import Emergency from '../Screens/Emergency'
+import Friends from '../Screens/Friends'
+import FriendReq from '../Screens/FriendReq'
 // importing Icons:
-import { Entypo ,MaterialCommunityIcons} from '@expo/vector-icons';
+import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
@@ -62,6 +64,8 @@ const Navigation = () => {
           <Stack.Screen name="Post" component={Post} />
           <Stack.Screen name="PostScreen" component={PostScreen} />
           <Stack.Screen name="UserProfile" component={UserProfile} />
+          <Stack.Screen options={{ headerStyle: { backgroundColor: "rgba(40,40,40,0.98)" } }} name="Friends" component={Friends} />
+          <Stack.Screen options={{ headerStyle: { backgroundColor: "rgba(40,40,40,0.98)" } }} name="FriendReq" component={FriendReq} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>
@@ -100,7 +104,7 @@ const TabNavigation = () => {
         headerShown: false, tabBarIcon: ({ focused }) => {
           return (
             <View style={{ justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
-              <MaterialCommunityIcons name="alert-octagram" size={focused ? 32 : 24} color={focused ? "pink" : "grey"}  />
+              <MaterialCommunityIcons name="alert-octagram" size={focused ? 32 : 24} color={focused ? "pink" : "grey"} />
               {focused ? null : <Text style={{ fontSize: 12, color: focused ? "pink" : "grey" }}>Alert</Text>}
             </View>
           )

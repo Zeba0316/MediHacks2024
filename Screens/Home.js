@@ -10,7 +10,7 @@ import { FontAwesome, Entypo } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
-  const { userId, setUserImage, setUserName, userName, userImage } = useContext(userType);
+  const { userId, setUserId,setUserImage, setUserName, userName, userImage } = useContext(userType);
   const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
   const navigation = useNavigation();
   const focus = useIsFocused();
@@ -183,7 +183,7 @@ const Home = () => {
       <View style={{ minHeight: hp("5.1%"), width: "100%", alignItems: "center", justifyContent: "center", position: "relative", flexDirection: "row" }}>
         <Text style={{ color: "pink", fontSize: hp("3.2%"), fontWeight: "500", textShadowRadius: 8, textShadowColor: "rgba(255,255,255,0.3)" }}>Explore</Text>
         <TouchableOpacity
-          onPress={() => { AsyncStorage.clear(); navigation.navigate("Login") }}
+          onPress={() => { AsyncStorage.clear(); setTimeout(() => { navigation.navigate("Login");setUserName('');setUserId('') }, 100) }}
           style={{ position: "absolute", right: 25, top: 5 }}>
           <Entypo name="log-out" size={26} color="white" />
         </TouchableOpacity>

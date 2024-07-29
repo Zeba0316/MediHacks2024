@@ -16,7 +16,7 @@ const Login = () => {
     // navigation Hook and Focus: 
     const navigation = useNavigation();
     const focus = useIsFocused();
-    const { userId, setUserId } = useContext(userType);
+    const { userId, setUserId,setLogin } = useContext(userType);
     // SERVER URL:
     const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
 
@@ -88,6 +88,7 @@ const Login = () => {
                 await AsyncStorage.setItem("authToken", token);
                 await decode(token);
                 setFlag(true);
+                setLogin(true);
 
             } else {
                 Alert.alert("Error in Signing In", res.data.message);

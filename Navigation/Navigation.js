@@ -2,7 +2,7 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createNativeStackNavigator, } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 // importing Screens:
 import WelcomeScreen from '../Screens/Welcome'
@@ -40,6 +40,7 @@ const Navigation = () => {
             component={SignUp}
             options={{
               headerShown: false,
+              animation: "slide_from_right"
             }}
           />
           <Stack.Screen
@@ -52,22 +53,29 @@ const Navigation = () => {
           <Stack.Screen
             name="Verification"
             component={Verification}
-            options={{ headerShown: false }}
+            options={{
+              headerShown: false,
+              animation: "slide_from_right"
+            }}
           />
           <Stack.Screen
             name="ProfileBuild"
             component={ProfileBuild}
-            options={{ headerShown: false }}
+            options={{
+              headerShown: false,
+              animation: "slide_from_right"
+            }}
           />
           <Stack.Screen name="MainTabs" component={TabNavigation} options={{
-            headerShown: false
+            headerShown: false,
+            animation: "slide_from_right"
           }} />
-          <Stack.Screen name="Post" component={Post} />
-          <Stack.Screen name="PostScreen" component={PostScreen} />
-          <Stack.Screen name="UserProfile" component={UserProfile} />
-          <Stack.Screen options={{ headerStyle: { backgroundColor: "rgba(40,40,40,0.98)" } }} name="Friends" component={Friends} />
-          <Stack.Screen options={{ headerStyle: { backgroundColor: "rgba(40,40,40,0.98)" } }} name="FriendReq" component={FriendReq} />
-          <Stack.Screen name="Messages" component={Message} />
+          <Stack.Screen name="Post" component={Post} options={{ animation: "slide_from_bottom" }} />
+          <Stack.Screen name="PostScreen" component={PostScreen} options={{ animation: "slide_from_right" }} />
+          <Stack.Screen name="UserProfile" component={UserProfile} options={{ animation: "simple_push" }} />
+          <Stack.Screen options={{ headerStyle: { backgroundColor: "rgba(40,40,40,0.98)" }, animation: "slide_from_right" }} name="Friends" component={Friends} />
+          <Stack.Screen options={{ headerStyle: { backgroundColor: "rgba(40,40,40,0.98)" }, animation: "slide_from_left" }} name="FriendReq" component={FriendReq} />
+          <Stack.Screen name="Messages" component={Message} options={{ animation: "fade_from_bottom" }} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

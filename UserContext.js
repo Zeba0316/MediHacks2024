@@ -6,8 +6,9 @@ const UserContext = ({ children }) => {
     const [userId, setUserId] = useState("");
     const [userName, setUserName] = useState("");
     const [userImage, setUserImage] = useState("");
+    const [login, setLogin] = useState(true);
     return (
-        <userType.Provider value={{ userId, setUserId, userName, setUserName, userImage, setUserImage }}>
+        <userType.Provider value={{ userId, setUserId, userName, setUserName, userImage, setUserImage,login,setLogin }}>
             {children}
         </userType.Provider>
     )

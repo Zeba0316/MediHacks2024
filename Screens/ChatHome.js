@@ -1,17 +1,18 @@
-import { View, Text, Alert, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Alert, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import axios from 'axios';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { userType } from "../UserContext";
 import UserBlock from '../Components/UserBlock';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 // importing icons:
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 const ChatHome = () => {
   const serverUrl = process.env.EXPO_PUBLIC_SERVERURL;
   const navigation = useNavigation();
-  const { userId } = useContext(userType);
+  const focus = useIsFocused();
+  const { userId, setLogin, login } = useContext(userType);
   const [userArr, setUserArr] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -46,7 +47,25 @@ const ChatHome = () => {
   }, [])
 
   useEffect(() => {
-    fetchUsers(page, 10);
+    if (focus) {
+      if (login) {
+        const emptyArr = []
+        setUserArr(prev => [...emptyArr]);
+        setHasMore(true);
+        setPage(1);
+        fetchUsers(page, 4).then(async () => {
+          console.log("login again");
+          await setLogin(false);
+        });
+      }
+    }
+  }, [focus])
+
+  useEffect(() => {
+    if (!login){
+      fetchUsers(page,4);
+    }
+
   }, [page]);
 
   const fetchUsers = async (page, limit) => {
@@ -85,7 +104,7 @@ const ChatHome = () => {
         )}
         onEndReached={loadMoreUsers}
         onEndReachedThreshold={0.5}
-        ListFooterComponent={loading && <Text style={{ color: 'white', textAlign: 'center' }}>Loading...</Text>}
+        ListFooterComponent={loading && <ActivityIndicator color={"pink"} size={"large"} />}
       />
     </View>
   );
